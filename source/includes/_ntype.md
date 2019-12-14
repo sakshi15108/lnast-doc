@@ -4,18 +4,26 @@
 
 ## assign
 
-An assignment node sets the right hand side value to the reference pointed by the left hand side of the expression.
-The left hand side is always a reference. The right hand side is a reference or a constant.
+```coffescript
+// Pyrope
+val = 1023u10bits
+```
 
 ![assign](source/graphviz/assign.png)
 
-```coffescript
-val = 1023
+An assignment node sets the right hand side value to the reference pointed by the left hand side of the expression.
+The left hand side is always a reference. The right hand side is a reference or a constant.
+
+
+
+```verilog
+// Verilog
+assign val = 10`d1023
 ```
 
 ```shell
 1       0       0       SEQ0
-2       1       0       0       10      =       val     0d1023
+2       1       0       0       10      =       val     0d1023u10
 ```
 
 ```cpp
