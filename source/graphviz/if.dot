@@ -1,0 +1,16 @@
+digraph assign {
+  rankdir=LR
+  bgcolor="transparent"
+
+  node [shape=record, style="rounded", penwidth = 2];
+  edge [color="#142b30", arrowhead="vee", penwidth = 2];
+
+  node0 [label = "<a> if | <l> c_stmt  | <r> cond | <r2> stmt"];
+  node1 [label = "<a> c_stmt  | <l> 1st | 2nd | ... "];
+  node2 [label = "<a> const | <l> string"];
+  node3 [label = "<a> stmt  | <l> 1st | 2nd | ... "];
+
+  node0:l -> node1:a;
+  node0:r -> node2:a;
+  node0:r2 -> node3:a;
+}
