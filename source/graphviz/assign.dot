@@ -1,5 +1,6 @@
 digraph assign {
   rankdir=LR
+  bgcolor="transparent"
 
   node [shape=record, style="rounded", penwidth = 2];
   edge [color="#142b30", arrowhead="vee", penwidth = 2];
