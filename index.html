@@ -87,17 +87,17 @@ window.onpopstate = function() {
 	  	<ul class="toc-list-h1">
         
           <li>
-            <a href="#nodes-types" class="toc-h1 toc-link" data-title="Nodes types">Nodes types</a>
+            <a href="#nodes-types" class="toc-h1 toc-link" data-title="Nodes Types">Nodes Types</a>
             
               <ul class="toc-list-h2">
                 
                   <li>
-                    <a href="#assign" class="toc-h2 toc-link" data-title="">assign</a>
+                    <a href="#assign-statements" class="toc-h2 toc-link" data-title="">Assign Statements</a>
                     
                   </li>
                 
                   <li>
-                    <a href="#if" class="toc-h2 toc-link" data-title="">if</a>
+                    <a href="#if-statements" class="toc-h2 toc-link" data-title="">if Statements</a>
                     
                   </li>
                 
@@ -132,14 +132,18 @@ window.onpopstate = function() {
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <!-- Renderer: Shins v2.4.1-0 --><h1 id="nodes-types">Nodes types</h1>
-<h2 id="assign">assign</h2>
+        <!-- Renderer: Shins v2.4.1-0 --><h1 id="nodes-types">Nodes Types</h1>
+<h2 id="assign-statements">Assign Statements</h2>
+<h3 id="assign-trivial-constant">Assign Trivial Constant</h3>
 <pre class="highlight"><code>// Pyrope
 val = 1023u10bits
 </code></pre>
-<p><img src="source/graphviz/assign.png" alt="assign"></p>
+<p><img src="source/graphviz/assign_trivial_constant.png" alt="assign"></p>
 <p>An assignment node sets the right hand side value to the reference pointed by the left hand side of the expression.
 The left hand side is always a reference. The right hand side is a reference or a constant.</p>
+<blockquote>
+<p>Equivalent code</p>
+</blockquote>
 <pre class="highlight tab tab-verilog"><code><span class="hljs-comment">// Verilog</span>
 <span class="hljs-keyword">assign</span> val = <span class="hljs-number">10</span><span class="hljs-meta">`d1023</span>
 </code></pre>
@@ -151,19 +155,13 @@ Lnast_ntype nt_const = Lnast_type::create_const();
 
 <span class="hljs-keyword">auto</span> if_idx = lnast-&gt;add_child(parent_idx, Lnast_node(nt_if));
 </code></pre>
-<p>Statements that have operations must breakdown the operations per type, and then assign the temporal value to the assign node.</p>
-<pre class="highlight tab tab-shell"><code>1       0       SEQ0
-2       1       0       13      -       ___a    b       0d1
-3       1       0       13      =       total   ___a
-</code></pre>
-<pre class="highlight tab tab-cpp"><code>Lnast_ntype nt_total = Lnast_type::create_ref();
-Lnast_ntype nt_b     = Lnast_type::create_ref();
-Lnast_ntype nt____a  = Lnast_type::create_ref();
-
-<span class="hljs-keyword">auto</span> if_idx = lnast-&gt;add_child(parent_idx, Lnast_node(nt_if));
-</code></pre>
+<h3 id="assign-simple-assignment">Assign Simple Assignment</h3>
 <pre class="highlight"><code>a = b - 1
 </code></pre>
+<p>Statements that have operations must breakdown the operations per type, and then assign the temporal value to the assign node.</p>
+<blockquote>
+<p>Equivalent code</p>
+</blockquote>
 <pre class="highlight tab tab-shell"><code>1       0       SEQ0
 2       1       0       13      -       ___a    b       0d1
 3       1       0       13      =       total   ___a
@@ -174,7 +172,17 @@ Lnast_ntype nt____a  = Lnast_type::create_ref();
 
 <span class="hljs-keyword">auto</span> if_idx = lnast-&gt;add_child(parent_idx, Lnast_node(nt_if));
 </code></pre>
-<h2 id="if">if</h2>
+<pre class="highlight tab tab-shell"><code>1       0       SEQ0
+2       1       0       13      -       ___a    b       0d1
+3       1       0       13      =       total   ___a
+</code></pre>
+<pre class="highlight tab tab-cpp"><code>Lnast_ntype nt_total = Lnast_type::create_ref();
+Lnast_ntype nt_b     = Lnast_type::create_ref();
+Lnast_ntype nt____a  = Lnast_type::create_ref();
+
+<span class="hljs-keyword">auto</span> if_idx = lnast-&gt;add_child(parent_idx, Lnast_node(nt_if));
+</code></pre>
+<h2 id="if-statements">if Statements</h2>
 <pre class="highlight"><code>if a &gt; 3 {
   a = a - 1
 }
