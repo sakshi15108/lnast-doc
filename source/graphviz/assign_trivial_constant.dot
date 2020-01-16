@@ -7,8 +7,8 @@ digraph assign {
 
 
   node0 [label = "<a> assign | <l> lhs  | <r> rhs"];
-  node1 [label = "<a> ref   | <l> string"];
-  node2 [label = "<a> const | <l> string"];
+  node1 [label = "<a> ref   | <l> val"];
+  node2 [label = "<a> const | <l> 0d1023u10"];
 
   node0:l -> node1:a;
   node0:r -> node2:a;

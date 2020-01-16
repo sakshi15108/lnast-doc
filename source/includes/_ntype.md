@@ -1,22 +1,14 @@
 
 
-# Nodes Types
+# Assign Statements
 
-## Assign Statements
+## Assign Trivial Constant
 
-### Assign Trivial Constant
 
 ```coffescript
 // Pyrope
 val = 1023u10bits
 ```
-
-![assign](source/graphviz/assign_trivial_constant.png)
-
-An assignment node sets the right hand side value to the reference pointed by the left hand side of the expression.
-The left hand side is always a reference. The right hand side is a reference or a constant.
-
-> Equivalent code
 
 ```verilog
 // Verilog
@@ -24,57 +16,64 @@ assign val = 10`d1023
 ```
 
 ```shell
+// CFG
 1       0       0       SEQ0
 2       1       0       0       10      =       val     0d1023u10
 ```
 
 ```cpp
+// c++
 Lnast_ntype nt_val   = Lnast_type::create_ref();
 Lnast_ntype nt_const = Lnast_type::create_const();
 
 auto if_idx = lnast->add_child(parent_idx, Lnast_node(nt_if));
 ```
 
-### Assign Simple Assignment
+![assign](source/graphviz/assign_trivial_constant.png)
+
+An assignment node sets the right hand side value to the reference pointed by the left hand side of the expression.
+The left hand side is always a reference. The right hand side is a reference or a constant.
+
+## Assign Simple Expression
 
 ```coffescript
-a = b - 1
+total = (x - 1) + 3 + 2
 ```
+
+
+```shell
+1       0       SEQ0
+2       1       0       13      -       ___a    b       0d1
+3       1       0       13      =       total   ___a
+```
+
+```cpp
+Lnast_ntype nt_total = Lnast_type::create_ref();
+Lnast_ntype nt_b     = Lnast_type::create_ref();
+Lnast_ntype nt____a  = Lnast_type::create_ref();
+
+auto if_idx = lnast->add_child(parent_idx, Lnast_node(nt_if));
+```
+
+```shell
+1       0       SEQ0
+2       1       0       13      -       ___a    b       0d1
+3       1       0       13      =       total   ___a
+```
+
+```cpp
+Lnast_ntype nt_total = Lnast_type::create_ref();
+Lnast_ntype nt_b     = Lnast_type::create_ref();
+Lnast_ntype nt____a  = Lnast_type::create_ref();
+
+auto if_idx = lnast->add_child(parent_idx, Lnast_node(nt_if));
+```
+
+![assign](source/graphviz/assign_simple_expression.png)
 
 Statements that have operations must breakdown the operations per type, and then assign the temporal value to the assign node.
 
-> Equivalent code
-
-```shell
-1       0       SEQ0
-2       1       0       13      -       ___a    b       0d1
-3       1       0       13      =       total   ___a
-```
-
-```cpp
-Lnast_ntype nt_total = Lnast_type::create_ref();
-Lnast_ntype nt_b     = Lnast_type::create_ref();
-Lnast_ntype nt____a  = Lnast_type::create_ref();
-
-auto if_idx = lnast->add_child(parent_idx, Lnast_node(nt_if));
-```
-
-```shell
-1       0       SEQ0
-2       1       0       13      -       ___a    b       0d1
-3       1       0       13      =       total   ___a
-```
-
-```cpp
-Lnast_ntype nt_total = Lnast_type::create_ref();
-Lnast_ntype nt_b     = Lnast_type::create_ref();
-Lnast_ntype nt____a  = Lnast_type::create_ref();
-
-auto if_idx = lnast->add_child(parent_idx, Lnast_node(nt_if));
-```
-
-
-## if Statements
+# if Statements
 
 ```coffescript
 if a > 3 {
