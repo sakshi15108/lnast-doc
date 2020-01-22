@@ -152,8 +152,29 @@ val = 1023u10bits
 <pre class="highlight tab tab-cpp"><code><span class="hljs-comment">// c++</span>
 Lnast_ntype nt_val   = Lnast_type::create_ref();
 Lnast_ntype nt_const = Lnast_type::create_const();
+Lnast_ntype nt_assign = Lnast_type::create_assign();
 
-<span class="hljs-keyword">auto</span> if_idx = lnast-&gt;add_child(parent_idx, Lnast_node(nt_if));
+<span class="hljs-keyword">auto</span> idx_assign = lnast-&gt;add_child(idx_parent, Lnast_node(nt_assign));
+<span class="hljs-keyword">auto</span> idx_val    = lnast-&gt;add_child(idx_assign, Lnast_node(nt_val, Token(Token_id_alnum, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-string">"val"</span>)));
+<span class="hljs-keyword">auto</span> idx_const  = lnast-&gt;add_child(idx_assign, Lnast_node(nt_const, Token(Token_id_num, <span class="hljs-number">7</span>, <span class="hljs-number">0</span>, <span class="hljs-string">"0d1023u10"</span>)));
+
+Lnast_ntype nt_val   = Lnast_type::create_ref();
+Lnast_ntype nt_const = Lnast_type::create_const();
+Lnast_ntype nt_assign = Lnast_type::create_assign();
+
+
+<span class="hljs-keyword">auto</span> lnast_val = Lnast_node::create_ref(<span class="hljs-string">"val"</span>);
+<span class="hljs-keyword">auto</span> lnast_val = Lnast_node::create_ref(<span class="hljs-string">"val"</span>, LineNo);
+<span class="hljs-keyword">auto</span> lnast_val = Lnast_node::create_ref(<span class="hljs-string">"val"</span>, LineNo, Pos);
+<span class="hljs-keyword">auto</span> lnast_val = Lnast_node::create_ref(Token);
+
+<span class="hljs-keyword">auto</span> lnast_val = Lnast_node::create_const(<span class="hljs-string">"0d1023u10"</span>);
+
+<span class="hljs-keyword">auto</span> lnast_assign = Lnast_node::create_assign(<span class="hljs-number">0</span>); <span class="hljs-comment">// 0 line number</span>
+
+<span class="hljs-keyword">auto</span> idx_assign = lnast-&gt;add_child(idx_parent, lnast_assign);
+<span class="hljs-keyword">auto</span> idx_val    = lnast-&gt;add_child(idx_assign, lnast_val);
+<span class="hljs-keyword">auto</span> idx_const  = lnast-&gt;add_child(idx_assign, lnast_const);
 </code></pre>
 <p><img src="source/graphviz/assign_trivial_constant.png" alt="assign"></p>
 <p>An assignment node sets the right hand side value to the reference pointed by the left hand side of the expression.
