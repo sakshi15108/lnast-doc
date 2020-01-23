@@ -23,26 +23,29 @@ assign val = 10`d1023
 
 ```cpp
 // c++
-Lnast_ntype nt_val   = Lnast_type::create_ref();
-Lnast_ntype nt_const = Lnast_type::create_const();
+
+//Current Version
+Lnast_ntype nt_val    = Lnast_type::create_ref();
+Lnast_ntype nt_const  = Lnast_type::create_const();
 Lnast_ntype nt_assign = Lnast_type::create_assign();
 
 auto idx_assign = lnast->add_child(idx_parent, Lnast_node(nt_assign));
-auto idx_val    = lnast->add_child(idx_assign, Lnast_node(nt_val, Token(Token_id_alnum, 0, 0, "val")));
-auto idx_const  = lnast->add_child(idx_assign, Lnast_node(nt_const, Token(Token_id_num, 7, 0, "0d1023u10")));
+auto idx_val    = lnast->add_child(idx_assign, Lnast_node(nt_val,   Token(Token_id_alnum, 0, 0, "val")));
+auto idx_const  = lnast->add_child(idx_assign, Lnast_node(nt_const, Token(Token_id_num,   7, 0, "0d1023u10")));
 
-Lnast_ntype nt_val   = Lnast_type::create_ref();
-Lnast_ntype nt_const = Lnast_type::create_const();
-Lnast_ntype nt_assign = Lnast_type::create_assign();
 
+
+
+//need new function of Lnast_node::create_ref(), Lnast_node::create_if() ... etc
+//and each of the create_xx has two 4 versions ...?
 
 auto lnast_val = Lnast_node::create_ref("val");
 auto lnast_val = Lnast_node::create_ref("val", LineNo);
 auto lnast_val = Lnast_node::create_ref("val", LineNo, Pos);
 auto lnast_val = Lnast_node::create_ref(Token);
 
-auto lnast_val = Lnast_node::create_const("0d1023u10");
 
+auto lnast_val = Lnast_node::create_const("0d1023u10");
 auto lnast_assign = Lnast_node::create_assign(0); // 0 line number
 
 auto idx_assign = lnast->add_child(idx_parent, lnast_assign);
