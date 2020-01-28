@@ -1,9 +1,8 @@
 
 
-# Assign Statements
+# Assign Statement
 
 ## Assign Trivial Constant
-
 
 ```coffescript
 // Pyrope
@@ -24,39 +23,42 @@ assign val = 10`d1023
 ```cpp
 // c++
 
-//Current Version
-Lnast_ntype nt_val    = Lnast_type::create_ref();
-Lnast_ntype nt_const  = Lnast_type::create_const();
-Lnast_ntype nt_assign = Lnast_type::create_assign();
 
-auto idx_assign = lnast->add_child(idx_parent, Lnast_node(nt_assign));
-auto idx_val    = lnast->add_child(idx_assign, Lnast_node(nt_val,   Token(Token_id_alnum, 0, 0, "val")));
-auto idx_const  = lnast->add_child(idx_assign, Lnast_node(nt_const, Token(Token_id_num,   7, 0, "0d1023u10")));
+// 4 valid lnast assign_node with data of line number and position
+auto node_statements = Lnast_node::create_statements("SEQ0");   
+auto node_statements = Lnast_node::create_statements("SEQ0", line_num);   
+auto node_statements = Lnast_node::create_statements("SEQ0", line_num, pos); 
+auto node_statements = Lnast_node::create_statements(Token); 
 
 
+// 3 valid lnast assign_node with data of line number and position
+auto node_pure_assign = Lnast_node::create_pure_assign(line_num);   
+auto node_pure_assign = Lnast_node::create_pure_assign(line_num, pos); 
+auto node_pure_assign = Lnast_node::create_pure_assign(); 
 
 
-//need new function of Lnast_node::create_ref(), Lnast_node::create_if() ... etc
-//and each of the create_xx has two 4 versions ...?
-
-auto lnast_var = Lnast_node::create_ref("var");
-auto lnast_var = Lnast_node::create_ref("var", LineNo);
-auto lnast_var = Lnast_node::create_ref("var", LineNo, Pos);
-auto lnast_var = Lnast_node::create_ref(Token);
+// 4 valid lnast ref_node with data of string_view, line number, position or Token.
+auto node_ref = Lnast_node::create_ref("val");
+auto node_ref = Lnast_node::create_ref("val", line_num);
+auto node_ref = Lnast_node::create_ref("val", line_num, pos);
+auto node_ref = Lnast_node::create_ref(Token);
 
 
-auto lnast_var = Lnast_node::create_const("0d1023u10");
-auto lnast_assign = Lnast_node::create_assign(0); // 0 line number
+// 4 valid lnast const_node with data of string_view, line number, position or Token.
+auto node_const = Lnast_node::create_const("0d1023u10"); 
+auto node_const = Lnast_node::create_const("0d1023u10", line_num);
+auto node_const = Lnast_node::create_const("0d1023u10", line_num, pos);
+auto node_const = Lnast_node::create_const(Token);
 
-auto idx_assign = lnast->add_child(idx_parent, lnast_assign);
-auto idx_var    = lnast->add_child(idx_assign, lnast_var);
-auto idx_const  = lnast->add_child(idx_assign, lnast_const);
+auto idx_statements = lnast->add_child(idx_root,       node_statements);
+auto idx_assign     = lnast->add_child(idx_statements, node_pure_assign);
+auto idx_val        = lnast->add_child(idx_assign,     node_ref);
+auto idx_const      = lnast->add_child(idx_assign,     node_const);
 ```
 
 ![assign](source/graphviz/assign_trivial_constant.png)
 
-An assignment node sets the right hand side value to the reference pointed by the left hand side of the expression.
-The left hand side is always a reference. The right hand side is a reference or a constant.
+An pure_assign node sets the right hand side value to the reference pointed by the left hand side of the expression. The left hand side is always a reference. The right hand side is a reference or a constant.
 
 ## Assign Simple Expression
 
@@ -64,6 +66,21 @@ The left hand side is always a reference. The right hand side is a reference or 
 total = (x - 1) + 3 + 2
 ```
 
+```shell
+1       0       0       SEQ0
+2       1       0       0       21      -       ___c    x       0d1
+3       1       1       0       21      +       ___b    ___c    0d3
+4       1       2       0       21      +       ___a    ___b    0d2
+5       1       3       0       21      =       total   ___a
+
+```
+
+```cpp
+Lnast_ntype nt_total = Lnast_type::create_ref();
+Lnast_ntype nt_b     = Lnast_type::create_ref();
+Lnast_ntype nt____a  = Lnast_type::create_ref();
+
+```
 
 ```shell
 1       0       SEQ0
@@ -76,28 +93,13 @@ Lnast_ntype nt_total = Lnast_type::create_ref();
 Lnast_ntype nt_b     = Lnast_type::create_ref();
 Lnast_ntype nt____a  = Lnast_type::create_ref();
 
-auto if_idx = lnast->add_child(parent_idx, Lnast_node(nt_if));
-```
-
-```shell
-1       0       SEQ0
-2       1       0       13      -       ___a    b       0d1
-3       1       0       13      =       total   ___a
-```
-
-```cpp
-Lnast_ntype nt_total = Lnast_type::create_ref();
-Lnast_ntype nt_b     = Lnast_type::create_ref();
-Lnast_ntype nt____a  = Lnast_type::create_ref();
-
-auto if_idx = lnast->add_child(parent_idx, Lnast_node(nt_if));
 ```
 
 ![assign](source/graphviz/assign_simple_expression.png)
 
 Statements that have operations must breakdown the operations per type, and then assign the temporal value to the assign node.
 
-# if Statements
+# if Statement
 
 ```coffescript
 if a > 3 {
