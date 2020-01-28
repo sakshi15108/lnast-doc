@@ -39,17 +39,17 @@ auto idx_const  = lnast->add_child(idx_assign, Lnast_node(nt_const, Token(Token_
 //need new function of Lnast_node::create_ref(), Lnast_node::create_if() ... etc
 //and each of the create_xx has two 4 versions ...?
 
-auto lnast_val = Lnast_node::create_ref("val");
-auto lnast_val = Lnast_node::create_ref("val", LineNo);
-auto lnast_val = Lnast_node::create_ref("val", LineNo, Pos);
-auto lnast_val = Lnast_node::create_ref(Token);
+auto lnast_var = Lnast_node::create_ref("var");
+auto lnast_var = Lnast_node::create_ref("var", LineNo);
+auto lnast_var = Lnast_node::create_ref("var", LineNo, Pos);
+auto lnast_var = Lnast_node::create_ref(Token);
 
 
-auto lnast_val = Lnast_node::create_const("0d1023u10");
+auto lnast_var = Lnast_node::create_const("0d1023u10");
 auto lnast_assign = Lnast_node::create_assign(0); // 0 line number
 
 auto idx_assign = lnast->add_child(idx_parent, lnast_assign);
-auto idx_val    = lnast->add_child(idx_assign, lnast_val);
+auto idx_var    = lnast->add_child(idx_assign, lnast_var);
 auto idx_const  = lnast->add_child(idx_assign, lnast_const);
 ```
 
