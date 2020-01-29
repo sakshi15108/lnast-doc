@@ -60,19 +60,19 @@ window.onpopstate = function() {
         <div class="lang-selector">
           
             
-              <a href="#" data-language-name="coffescript">Pyrope</a>
+              <a href="#" data-language-name="coffescript">pyrope</a>
             
           
             
-              <a href="#" data-language-name="verilog">Verilog</a>
+              <a href="#" data-language-name="verilog">verilog</a>
             
           
             
-              <a href="#" data-language-name="shell">CFG</a>
+              <a href="#" data-language-name="shell">cfg</a>
             
           
             
-              <a href="#" data-language-name="cpp">C++</a>
+              <a href="#" data-language-name="cpp">cpp</a>
             
           
         </div>
@@ -149,34 +149,11 @@ val = 1023u10bits
 1       0       0       SEQ0
 2       1       0       0       10      =       val     0d1023u10
 </code></pre>
-<pre class="highlight tab tab-cpp"><code><span class="hljs-comment">// c++</span>
-
-
-<span class="hljs-comment">// 4 valid lnast assign_node with data of line number and position</span>
-<span class="hljs-keyword">auto</span> node_statements = Lnast_node::create_statements(<span class="hljs-string">"SEQ0"</span>);   
-<span class="hljs-keyword">auto</span> node_statements = Lnast_node::create_statements(<span class="hljs-string">"SEQ0"</span>, line_num);   
-<span class="hljs-keyword">auto</span> node_statements = Lnast_node::create_statements(<span class="hljs-string">"SEQ0"</span>, line_num, pos); 
-<span class="hljs-keyword">auto</span> node_statements = Lnast_node::create_statements(Token); 
-
-
-<span class="hljs-comment">// 3 valid lnast assign_node with data of line number and position</span>
-<span class="hljs-keyword">auto</span> node_pure_assign = Lnast_node::create_pure_assign(line_num);   
-<span class="hljs-keyword">auto</span> node_pure_assign = Lnast_node::create_pure_assign(line_num, pos); 
-<span class="hljs-keyword">auto</span> node_pure_assign = Lnast_node::create_pure_assign(); 
-
-
-<span class="hljs-comment">// 4 valid lnast ref_node with data of string_view, line number, position or Token.</span>
-<span class="hljs-keyword">auto</span> node_ref = Lnast_node::create_ref(<span class="hljs-string">"val"</span>);
-<span class="hljs-keyword">auto</span> node_ref = Lnast_node::create_ref(<span class="hljs-string">"val"</span>, line_num);
-<span class="hljs-keyword">auto</span> node_ref = Lnast_node::create_ref(<span class="hljs-string">"val"</span>, line_num, pos);
-<span class="hljs-keyword">auto</span> node_ref = Lnast_node::create_ref(Token);
-
-
-<span class="hljs-comment">// 4 valid lnast const_node with data of string_view, line number, position or Token.</span>
-<span class="hljs-keyword">auto</span> node_const = Lnast_node::create_const(<span class="hljs-string">"0d1023u10"</span>); 
-<span class="hljs-keyword">auto</span> node_const = Lnast_node::create_const(<span class="hljs-string">"0d1023u10"</span>, line_num);
-<span class="hljs-keyword">auto</span> node_const = Lnast_node::create_const(<span class="hljs-string">"0d1023u10"</span>, line_num, pos);
-<span class="hljs-keyword">auto</span> node_const = Lnast_node::create_const(Token);
+<pre class="highlight tab tab-cpp"><code><span class="hljs-comment">// C++</span>
+<span class="hljs-keyword">auto</span> node_statements  = Lnast_node::create_statements (<span class="hljs-string">"foo"</span>, line_num, pos); 
+<span class="hljs-keyword">auto</span> node_pure_assign = Lnast_node::create_pure_assign(<span class="hljs-string">"foo"</span>, line_num, pos); 
+<span class="hljs-keyword">auto</span> node_ref         = Lnast_node::create_ref        (<span class="hljs-string">"val"</span>, line_num, pos);
+<span class="hljs-keyword">auto</span> node_const       = Lnast_node::create_const      (<span class="hljs-string">"0d1023u10"</span>, line_num, pos);
 
 <span class="hljs-keyword">auto</span> idx_statements = lnast-&gt;add_child(idx_root,       node_statements);
 <span class="hljs-keyword">auto</span> idx_assign     = lnast-&gt;add_child(idx_statements, node_pure_assign);
@@ -241,19 +218,19 @@ lnast-&gt;add_child(if_idx, Lnast_node(...));
           <div class="lang-selector">
             
               
-                <a href="#" data-language-name="coffescript">Pyrope</a>
+                <a href="#" data-language-name="coffescript">pyrope</a>
               
             
               
-                <a href="#" data-language-name="verilog">Verilog</a>
+                <a href="#" data-language-name="verilog">verilog</a>
               
             
               
-                <a href="#" data-language-name="shell">CFG</a>
+                <a href="#" data-language-name="shell">cfg</a>
               
             
               
-                <a href="#" data-language-name="cpp">C++</a>
+                <a href="#" data-language-name="cpp">cpp</a>
               
             
           </div>

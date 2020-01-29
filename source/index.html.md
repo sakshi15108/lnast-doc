@@ -1,10 +1,10 @@
 ---
 title: LNAST
 language_tabs:
-  - coffescript: Pyrope
-  - verilog: Verilog
-  - shell: CFG
-  - cpp: C++
+  - coffescript: pyrope
+  - verilog: verilog
+  - shell: cfg
+  - cpp: cpp
 
 toc_footers:
   - >-
