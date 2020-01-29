@@ -87,6 +87,25 @@ window.onpopstate = function() {
 	  	<ul class="toc-list-h1">
         
           <li>
+            <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+            
+              <ul class="toc-list-h2">
+                
+                  <li>
+                    <a href="#function-overloadings-of-node-data-construction" class="toc-h2 toc-link" data-title="">Function Overloadings of Node Data Construction</a>
+                    
+                  </li>
+                
+                  <li>
+                    <a href="#another-example" class="toc-h2 toc-link" data-title="">Another Example</a>
+                    
+                  </li>
+                
+              </ul>
+            
+          </li>
+        
+          <li>
             <a href="#assign-statement" class="toc-h1 toc-link" data-title="Assign Statement">Assign Statement</a>
             
               <ul class="toc-list-h2">
@@ -137,7 +156,38 @@ window.onpopstate = function() {
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <!-- Renderer: Shins v2.4.1-0 --><h1 id="assign-statement">Assign Statement</h1>
+        <!-- Renderer: Shins v2.4.1-0 --><h1 id="introduction">Introduction</h1>
+<p>LNAST stands for Language-Neutral Abstract Syntax Tree, which is constituted of<br>
+Lnast_nodes and indexed by a tree structure.</p>
+<p>Each Lnast_node should has a specific node type and contain the following information from source code tokens<br>
+(a) line number<br>
+(b) pos<br>
+(c) string_view</p>
+<h2 id="function-overloadings-of-node-data-construction">Function Overloadings of Node Data Construction</h2>
+<p>Every node construction method has four function overloadings.<br>
+For example, to construct a Lnast_node with a type of reference,<br>
+we could use one of the following functions:</p>
+<pre class="highlight tab tab-cpp"><code><span class="hljs-comment">//C++</span>
+<span class="hljs-keyword">auto</span> node_ref = Lnast_node::create_ref(<span class="hljs-string">"foo"</span>);     
+<span class="hljs-keyword">auto</span> node_ref = Lnast_node::create_ref(<span class="hljs-string">"foo"</span>, line_num);     
+<span class="hljs-keyword">auto</span> node_ref = Lnast_node::create_ref(<span class="hljs-string">"foo"</span>, line_num, pos1, pos2);     
+<span class="hljs-keyword">auto</span> node_ref = Lnast_node::create_ref(token);   
+</code></pre>
+<p>In case (1), you only knows the variable name is &quot;foo&quot;.<br>
+In case (2), you know the variable name and the corresponding line number.<br>
+In case (3), you know the variable name, the line number, and the charactrer position.<br>
+In case (4), you are building LNAST from your HDL AST and you already have the Token.<br>
+The toke should have line number, pos, and string_view information.</p>
+<h2 id="another-example">Another Example</h2>
+<p>If you don't care the string_view to be stored in the node, just leave it empty for set &quot;foo&quot; for it.<br>
+For example, to build a node with type of pure_assign.</p>
+<pre class="highlight tab tab-cpp"><code><span class="hljs-comment">//C++</span>
+<span class="hljs-keyword">auto</span> node_pure_assign = Lnast_node::create_pure_assign();   
+<span class="hljs-keyword">auto</span> node_pure_assign = Lnast_node::create_pure_assign(line_num);     
+<span class="hljs-keyword">auto</span> node_pure_assign = Lnast_node::create_pure_assign(line_num, pos1, pos2);   
+<span class="hljs-keyword">auto</span> node_pure_assign = Lnast_node::create_pure_assign(token); <span class="hljs-comment">// The token is not necessary to have a string_view  </span>
+</code></pre>
+<h1 id="assign-statement">Assign Statement</h1>
 <h2 id="assign-trivial-constant">Assign Trivial Constant</h2>
 <pre class="highlight"><code>// Pyrope
 val = 1023u10bits
@@ -150,41 +200,72 @@ val = 1023u10bits
 2       1       0       0       10      =       val     0d1023u10
 </code></pre>
 <pre class="highlight tab tab-cpp"><code><span class="hljs-comment">// C++</span>
-<span class="hljs-keyword">auto</span> node_statements  = Lnast_node::create_statements (<span class="hljs-string">"foo"</span>, line_num, pos); 
-<span class="hljs-keyword">auto</span> node_pure_assign = Lnast_node::create_pure_assign(<span class="hljs-string">"foo"</span>, line_num, pos); 
-<span class="hljs-keyword">auto</span> node_ref         = Lnast_node::create_ref        (<span class="hljs-string">"val"</span>, line_num, pos);
-<span class="hljs-keyword">auto</span> node_const       = Lnast_node::create_const      (<span class="hljs-string">"0d1023u10"</span>, line_num, pos);
+<span class="hljs-keyword">auto</span> node_statements  = Lnast_node::create_statements (<span class="hljs-string">"foo"</span>, line_num, pos1, pos2); 
+<span class="hljs-keyword">auto</span> node_pure_assign = Lnast_node::create_pure_assign(<span class="hljs-string">"foo"</span>, line_num, pos1, pos2); 
+<span class="hljs-keyword">auto</span> node_target      = Lnast_node::create_ref        (<span class="hljs-string">"val"</span>, line_num, pos1, pos2);
+<span class="hljs-keyword">auto</span> node_const       = Lnast_node::create_const      (<span class="hljs-string">"0d1023u10"</span>, line_num, pos1, pos2);
 
 <span class="hljs-keyword">auto</span> idx_statements = lnast-&gt;add_child(idx_root,       node_statements);
 <span class="hljs-keyword">auto</span> idx_assign     = lnast-&gt;add_child(idx_statements, node_pure_assign);
-<span class="hljs-keyword">auto</span> idx_val        = lnast-&gt;add_child(idx_assign,     node_ref);
+<span class="hljs-keyword">auto</span> idx_target     = lnast-&gt;add_child(idx_assign,     node_target);
 <span class="hljs-keyword">auto</span> idx_const      = lnast-&gt;add_child(idx_assign,     node_const);
 </code></pre>
 <p><img src="source/graphviz/assign_trivial_constant.png" alt="assign"></p>
-<p>An pure_assign node sets the right hand side value to the reference pointed by the left hand side of the expression. The left hand side is always a reference. The right hand side is a reference or a constant.</p>
+<p>An pure_assign node sets the right hand side value to the reference pointed by the left hand side<br>
+of the expression. The left hand side is always a reference. The right hand side is a reference or a constant.</p>
 <h2 id="assign-simple-expression">Assign Simple Expression</h2>
-<pre class="highlight"><code>total = (x - 1) + 3 + 2
+<pre class="highlight"><code>//Pyrope
+total = (x - 1) + 3 + 2
 </code></pre>
-<pre class="highlight tab tab-shell"><code>1       0       0       SEQ0
-2       1       0       0       21      -       ___c    x       0d1
-3       1       1       0       21      +       ___b    ___c    0d3
-4       1       2       0       21      +       ___a    ___b    0d2
-5       1       3       0       21      =       total   ___a
+<pre class="highlight tab tab-verilog"><code><span class="hljs-comment">//Verilog</span>
+<span class="hljs-keyword">assign</span> total = (x - <span class="hljs-number">1</span>) + <span class="hljs-number">3</span> + <span class="hljs-number">2</span>
+</code></pre>
+<pre class="highlight tab tab-shell"><code>//CFG
+1       0       0       SEQ0
+2       1       0       0       21      -       ___a    x       0d1
+3       1       1       0       21      +       ___b    ___a    0d3    0d2
+4       1       3       0       21      =       total   ___b
 
 </code></pre>
-<pre class="highlight tab tab-cpp"><code>Lnast_ntype nt_total = Lnast_type::create_ref();
-Lnast_ntype nt_b     = Lnast_type::create_ref();
-Lnast_ntype nt____a  = Lnast_type::create_ref();
+<pre class="highlight tab tab-cpp"><code><span class="hljs-comment">// C++</span>
 
-</code></pre>
-<pre class="highlight tab tab-shell"><code>1       0       SEQ0
-2       1       0       13      -       ___a    b       0d1
-3       1       0       13      =       total   ___a
-</code></pre>
-<pre class="highlight tab tab-cpp"><code>Lnast_ntype nt_total = Lnast_type::create_ref();
-Lnast_ntype nt_b     = Lnast_type::create_ref();
-Lnast_ntype nt____a  = Lnast_type::create_ref();
+<span class="hljs-comment">// preparing lnast_node data</span>
+<span class="hljs-comment">// Note: as mentioned in the introduction, if you have the HDL-AST in hand, using</span>
+<span class="hljs-comment">// Token directly instead of explicit string, line_num, pos ... etc.</span>
 
+<span class="hljs-keyword">auto</span> node_sts          = Lnast_node::create_statements  (<span class="hljs-string">"foo"</span>,  line_num, pos1, pos2); 
+node node_minus        = Lnast_node::create_minus       (<span class="hljs-string">"foo"</span>,  line_num, pos1, pos2);
+node node_lhs1         = Lnast_node::create_ref         (<span class="hljs-string">"___a"</span>, line_num, pos1, pos2);
+node node_op1          = Lnast_node::create_ref         (<span class="hljs-string">"x"</span>,    line_num, pos1, pos2);
+node node_op2          = Lnast_node::create_const       (<span class="hljs-string">"0d1"</span>,  line_num, pos1, pos2);
+
+node node_plus         = Lnast_node::create_plis        (<span class="hljs-string">"bar"</span>,  line_num, pos1, pos2);
+node node_lhs2         = Lnast_node::create_ref         (<span class="hljs-string">"___b"</span>, line_num, pos1, pos2);
+node node_op3          = Lnast_node::create_ref         (<span class="hljs-string">"___a"</span>, line_num, pos1, pos2);
+node node_op4          = Lnast_node::create_const       (<span class="hljs-string">"0d3"</span>,  line_num, pos1, pos2);
+node node_op5          = Lnast_node::create_const       (<span class="hljs-string">"0d2"</span>,  line_num, pos1, pos2);
+
+<span class="hljs-keyword">auto</span> node_pure_assign  = Lnast_node::create_pure_assign (<span class="hljs-string">"foo2"</span>,  line_num, pos1, pos2); 
+<span class="hljs-keyword">auto</span> node_lhs3         = Lnast_node::create_ref         (<span class="hljs-string">"total"</span>, line_num, pos1, pos2);
+<span class="hljs-keyword">auto</span> node_op6          = Lnast_node::create_ref         (<span class="hljs-string">"___b"</span>,  line_num, pos1, pos2);
+
+
+<span class="hljs-comment">//construct the LNAST</span>
+<span class="hljs-keyword">auto</span> idx_sts        = lnast-&gt;add_child(idx_root,  node_sts);
+<span class="hljs-keyword">auto</span> idx_minus      = lnast-&gt;add_child(idx_sts,   node_minus);
+<span class="hljs-keyword">auto</span> idx_lhs1       = lnast-&gt;add_child(idx_minus, node_lhs1);
+<span class="hljs-keyword">auto</span> idx_op1        = lnast-&gt;add_child(idx_minus, node_op1);        
+<span class="hljs-keyword">auto</span> idx_op2        = lnast-&gt;add_child(idx_minus, node_op2);        
+
+<span class="hljs-keyword">auto</span> idx_plus       = lnast-&gt;add_child(idx_sts,   node_plus);
+<span class="hljs-keyword">auto</span> idx_lhs2       = lnast-&gt;add_child(idx_plus,  node_lhs2);
+<span class="hljs-keyword">auto</span> idx_op3        = lnast-&gt;add_child(idx_plus,  node_op3);        
+<span class="hljs-keyword">auto</span> idx_op4        = lnast-&gt;add_child(idx_plus,  node_op4);        
+<span class="hljs-keyword">auto</span> idx_op5        = lnast-&gt;add_child(idx_plus,  node_op5);        
+
+<span class="hljs-keyword">auto</span> idx_assign     = lnast-&gt;add_child(idx_sts,    node_pure_assign);
+<span class="hljs-keyword">auto</span> idx_lhs3       = lnast-&gt;add_child(idx_assign, node_lhs3);
+<span class="hljs-keyword">auto</span> idx_op6        = lnast-&gt;add_child(idx_assign, node_op6);        
 </code></pre>
 <p><img src="source/graphviz/assign_simple_expression.png" alt="assign"></p>
 <p>Statements that have operations must breakdown the operations per type, and then assign the temporal value to the assign node.</p>
