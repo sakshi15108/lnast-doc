@@ -4,7 +4,7 @@ Lnast_nodes and indexed by a tree structure.
 
 Each Lnast_node should has a specific node type and contain the following information from source code tokens  
 (a) line number   
-(b) pos   
+(b) pos_start, pos_end  
 (c) string_view   
 
 ## Function Overloadings of Node Data Construction
@@ -14,7 +14,7 @@ we could use one of the following functions:
 
 
 ```cpp
-//C++
+// C++
 auto node_ref = Lnast_node::create_ref("foo");     
 auto node_ref = Lnast_node::create_ref("foo", line_num);     
 auto node_ref = Lnast_node::create_ref("foo", line_num, pos1, pos2);     
@@ -25,7 +25,7 @@ In case (1), you only knows the variable name is "foo".
 In case (2), you know the variable name and the corresponding line number.  
 In case (3), you know the variable name, the line number, and the charactrer position.  
 In case (4), you are building LNAST from your HDL AST and you already have the Token.   
-The toke should have line number, pos, and string_view information.  
+The toke should have line_number, positions, and string_view information.  
 
 
 ## Another Example
@@ -34,7 +34,7 @@ For example, to build a node with type of pure_assign.
 
 
 ```cpp
-//C++
+// C++
 auto node_pure_assign = Lnast_node::create_pure_assign();   
 auto node_pure_assign = Lnast_node::create_pure_assign(line_num);     
 auto node_pure_assign = Lnast_node::create_pure_assign(line_num, pos1, pos2);   
@@ -83,19 +83,19 @@ of the expression. The left hand side is always a reference. The right hand side
 ## Assign Simple Expression
 
 ```coffescript
-//Pyrope
+// Pyrope
 total = (x - 1) + 3 + 2
 ```
 
 
 ```verilog
-//Verilog
+// Verilog
 assign total = (x - 1) + 3 + 2
 ```
 
 
 ```shell
-//CFG
+// CFG
 1       0       0       SEQ0
 2       1       0       0       21      -       ___a    x       0d1
 3       1       1       0       21      +       ___b    ___a    0d3    0d2
@@ -127,7 +127,7 @@ auto node_lhs3         = Lnast_node::create_ref         ("total", line_num, pos1
 auto node_op6          = Lnast_node::create_ref         ("___b",  line_num, pos1, pos2);
 
 
-//construct the LNAST
+// construct the LNAST
 auto idx_sts        = lnast->add_child(idx_root,  node_sts);
 auto idx_minus      = lnast->add_child(idx_sts,   node_minus);
 auto idx_lhs1       = lnast->add_child(idx_minus, node_lhs1);
@@ -154,26 +154,78 @@ Statements that have operations must breakdown the operations per type, and then
 
 ```coffescript
 if a > 3 {
-  a = a - 1
-}
-```
-
-```cpp
-Lnast_ntype nt_if    = Lnast_type::create_if();
-Lnast_ntype nt_cstmt = Lnast_type::create_cstnt();
-
-auto if_idx = lnast->add_child(parent_idx, Lnast_node(nt_if));
-lnast->add_child(if_idx, Lnast_node(nt_cstat));
-lnast->add_child(if_idx, Lnast_node(...));
+  b = a + 1
+} 
 ```
 
 ```shell
-1       0       SEQ0
-3       2       SEQ1
-4       3       0       23      >       ___a    a       0d3
-6       2       SEQ2
-7       6       0       23      -       ___b    a       0d1
-8       6       0       23      =       a       ___b
-2       1       0       23      if      ___a
+// CFG
+1  0  0  SEQ0                      
+2  1  0  0     24  if  ___a        
+3  2  0  SEQ1                      
+4  3  0  0     24  >   ___a  a     0d3
+6  2  0  SEQ2                      
+7  6  0  0     24  +   ___b  a     0d1
+8  6  1  0     24  =   a     ___b  
 ```
 
+```verilog
+assign b = (a > 3) ? a-1 : b; //FIXME: SH: incomplete cases? combinational loop!?
+```
+
+
+```cpp
+
+// construct the LNAST
+auto idx_sts0   = lnast->add_child(idx_root, Lnast_node::create_statements (token0));
+auto idx_if     = lnast->add_child(idx_sts0, Lnast_node::create_if         (token1));
+
+auto idx_csts   = lnast->add_child(idx_if,   Lnast_node::create_cstatements(token2));
+auto idx_gt     = lnast->add_child(idx_csts, Lnast_node::create_gt         (token_3)); 
+auto idx_lhs    = lnast->add_child(idx_gt,   LNast_node::create_ref        (token_4));
+auto idx_op1    = lnast->add_child(idx_gt,   LNast_node::create_ref        (token_5));
+auto idx_op2    = lnast->add_child(idx_gt,   LNast_node::create_const      (token_6));
+
+auto idx_sts1   = lnast->add_child(idx_root, Lnast_node::create_statements (token_7));
+auto idx_plus   = lnast->add_child(idx_sts1, Lnast_node::create_plus       (token_8));
+auto idx_lhs    = lnast->add_child(idx_plus, LNast_node::create_ref        (token_9));
+auto idx_op1    = lnast->add_child(idx_plus, LNast_node::create_ref        (token_a));
+auto idx_op2    = lnast->add_child(idx_plus, LNast_node::create_const      (token_b));
+```
+
+
+
+
+
+```coffescript
+// Pyrope
+if a > 10 {
+  b = 3 
+} elif a < 1 {
+  b = 2
+} else {
+  b = 1
+}
+
+```verilog
+// Verilog
+
+```
+
+
+```shell
+// CFG 
+1   0   0  SEQ0                       
+2   1   0  0     62  if    ___a       
+3   2   0  SEQ1                       
+4   3   0  0     62  >     ___a  a    0d10
+6   2   0  SEQ2                       
+7   6   0  0     62  =     b     0d3  
+9   2   2  0     62  elif  ___b       
+10  2   0  SEQ3                       
+11  10  0  0     62  <     ___b  a    0d1
+13  2   0  SEQ4                       
+14  13  0  0     62  =     b     0d2  
+16  2   0  SEQ5                       
+17  16  0  0     62  =     b     0d1  
+```
