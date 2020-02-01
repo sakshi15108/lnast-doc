@@ -2,8 +2,8 @@ digraph assign {
   rankdir=LR
   bgcolor="transparent"
 
-  node [fontname = "helvetica", shape=record, style="rounded", penwidth = 2];
-  edge [fontname = "helvetica", color="#142b30", arrowhead="normal", penwidth = 2];
+  node  [fontname = "helvetica", shape=record, style="rounded", penwidth = 2];
+  edge  [fontname = "helvetica", color="#142b30", arrowhead="normal", penwidth = 2];
   graph [fontname = "helvetica"];
 
 
@@ -22,7 +22,7 @@ digraph assign {
   node6 [label = "<a> ref   | <l> total"];
   node7 [label = "<a> ref   | <l> ___b"];
 
-  node8 [label = "<a> seq | <s1> stmt1 | <s2> stmt2 | <s3> stmt3 "];
+  node8 [label = "<a> stmts | <s1> statement1 | <s2> statement2 | <s3> statement3"];
 
   node8:s1 -> nodea0:a;
   node8:s2 -> nodeb0:a;
