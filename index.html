@@ -106,6 +106,30 @@ window.onpopstate = function() {
           </li>
         
           <li>
+            <a href="#module-input--output--and-register-declaration" class="toc-h1 toc-link" data-title="Module Input, Output, and Register Declaration">Module Input, Output, and Register Declaration</a>
+            
+              <ul class="toc-list-h2">
+                
+                  <li>
+                    <a href="#input" class="toc-h2 toc-link" data-title="">Input</a>
+                    
+                  </li>
+                
+                  <li>
+                    <a href="#output" class="toc-h2 toc-link" data-title="">Output</a>
+                    
+                  </li>
+                
+                  <li>
+                    <a href="#register" class="toc-h2 toc-link" data-title="">Register</a>
+                    
+                  </li>
+                
+              </ul>
+            
+          </li>
+        
+          <li>
             <a href="#assign-statement" class="toc-h1 toc-link" data-title="Assign Statement">Assign Statement</a>
             
               <ul class="toc-list-h2">
@@ -125,7 +149,21 @@ window.onpopstate = function() {
           </li>
         
           <li>
-            <a href="#n-ary-operation" class="toc-h1 toc-link" data-title="N-ary Operation">N-ary Operation</a>
+            <a href="#----unary-operation-statement" class="toc-h1 toc-link" data-title="!!! Unary Operation Statement">!!! Unary Operation Statement</a>
+            
+              <ul class="toc-list-h2">
+                
+                  <li>
+                    <a href="#----not-operation" class="toc-h2 toc-link" data-title="">!!! Not Operation</a>
+                    
+                  </li>
+                
+              </ul>
+            
+          </li>
+        
+          <li>
+            <a href="#n-ary-operation-statement" class="toc-h1 toc-link" data-title="N-ary Operation Statement">N-ary Operation Statement</a>
             
               <ul class="toc-list-h2">
                 
@@ -223,27 +261,27 @@ window.onpopstate = function() {
           </li>
         
           <li>
-            <a href="#---tuple" class="toc-h1 toc-link" data-title="!!!Tuple">!!!Tuple</a>
+            <a href="#---tuple-statement" class="toc-h1 toc-link" data-title="!!!Tuple Statement">!!!Tuple Statement</a>
             
           </li>
         
           <li>
-            <a href="#---tuple-concatenation" class="toc-h1 toc-link" data-title="!!!Tuple Concatenation">!!!Tuple Concatenation</a>
+            <a href="#---tuple-concatenation-statement" class="toc-h1 toc-link" data-title="!!!Tuple Concatenation Statement">!!!Tuple Concatenation Statement</a>
             
           </li>
         
           <li>
-            <a href="#---for-loop" class="toc-h1 toc-link" data-title="!!!For Loop">!!!For Loop</a>
+            <a href="#---for-loop-statement" class="toc-h1 toc-link" data-title="!!!For Loop Statement">!!!For Loop Statement</a>
             
           </li>
         
           <li>
-            <a href="#---while-loop" class="toc-h1 toc-link" data-title="!!!While Loop">!!!While Loop</a>
+            <a href="#---while-loop-statement" class="toc-h1 toc-link" data-title="!!!While Loop Statement">!!!While Loop Statement</a>
             
           </li>
         
           <li>
-            <a href="#---function-definition" class="toc-h1 toc-link" data-title="!!!Function Definition">!!!Function Definition</a>
+            <a href="#---function-definition-statement" class="toc-h1 toc-link" data-title="!!!Function Definition Statement">!!!Function Definition Statement</a>
             
           </li>
         
@@ -324,6 +362,40 @@ This is true for many of the operator node, for example, to build a node with ty
 <span class="hljs-keyword">auto</span> node_assign = Lnast_node::create_assign(line_num);     
 <span class="hljs-keyword">auto</span> node_assign = Lnast_node::create_assign(line_num, pos1, pos2);   
 <span class="hljs-keyword">auto</span> node_assign = Lnast_node::create_assign(token); <span class="hljs-comment">// The token is not necessary to have a string_view  </span>
+</code></pre>
+<h1 id="module-input--output--and-register-declaration">Module Input, Output, and Register Declaration</h1>
+<p>In LNAST, all input/output/register are defined in the node type reference
+with differenct prefix of string_view, &quot;$&quot; stands for input, &quot;%&quot; stands for
+output, and &quot;#&quot; stands for register.</p>
+<h2 id="input">Input</h2>
+<pre class="highlight"><code>// Pyrope
+foo = $a
+</code></pre>
+<pre class="highlight tab tab-verilog"><code><span class="hljs-comment">// Verilog</span>
+<span class="hljs-keyword">input</span> a;
+</code></pre>
+<pre class="highlight tab tab-cpp"><code><span class="hljs-comment">// C++</span>
+<span class="hljs-keyword">auto</span> node_input = Lnast_node::create_ref(<span class="hljs-string">"$a"</span>, line_num, pos1, pos2);
+</code></pre>
+<h2 id="output">Output</h2>
+<pre class="highlight"><code>// Pyrope
+%out
+</code></pre>
+<pre class="highlight tab tab-verilog"><code><span class="hljs-comment">// Verilog</span>
+<span class="hljs-keyword">output</span> out;
+</code></pre>
+<pre class="highlight tab tab-cpp"><code><span class="hljs-comment">// C++</span>
+<span class="hljs-keyword">auto</span> node_output = Lnast_node::create_ref(<span class="hljs-string">"%out"</span>, line_num, pos1, pos2);
+</code></pre>
+<h2 id="register">Register</h2>
+<pre class="highlight"><code>// Pyrope
+#reg_foo
+</code></pre>
+<pre class="highlight tab tab-verilog"><code><span class="hljs-comment">// Verilog</span>
+<span class="hljs-keyword">reg</span> reg_foo;
+</code></pre>
+<pre class="highlight tab tab-cpp"><code><span class="hljs-comment">// C++</span>
+<span class="hljs-keyword">auto</span> node_reg = Lnast_node::create_ref(<span class="hljs-string">"#reg_foo"</span>, line_num, pos1, pos2);
 </code></pre>
 <h1 id="assign-statement">Assign Statement</h1>
 <h2 id="assign-trivial-constant">Assign Trivial Constant</h2>
@@ -406,7 +478,9 @@ node node_op5    = Lnast_node::create_const  (<span class="hljs-string">"0d2"</s
 </code></pre>
 <p><img src="source/graphviz/assign_simple_expression.png" alt="assign">
 statements that have operations must breakdown the operations per type, and then assign the temporal value to the assign node.</p>
-<h1 id="n-ary-operation">N-ary Operation</h1>
+<h1 id="----unary-operation-statement">!!! Unary Operation Statement</h1>
+<h2 id="----not-operation">!!! Not Operation</h2>
+<h1 id="n-ary-operation-statement">N-ary Operation Statement</h1>
 <p>N-ary operation computes n rhs operands and assign the result to the lhs.</p>
 <h2 id="and-operation">And Operation</h2>
 <pre class="highlight"><code>// Pyrope
@@ -561,79 +635,55 @@ if a &gt; 10 {
 
 </code></pre>
 <p><img src="source/graphviz/full_case_if.png" alt="assign"></p>
-<h1 id="---tuple">!!!Tuple</h1>
-<h1 id="---tuple-concatenation">!!!Tuple Concatenation</h1>
-<h1 id="---for-loop">!!!For Loop</h1>
-<h1 id="---while-loop">!!!While Loop</h1>
-<h1 id="---function-definition">!!!Function Definition</h1>
+<h1 id="---tuple-statement">!!!Tuple Statement</h1>
+<h1 id="---tuple-concatenation-statement">!!!Tuple Concatenation Statement</h1>
+<h1 id="---for-loop-statement">!!!For Loop Statement</h1>
+<h1 id="---while-loop-statement">!!!While Loop Statement</h1>
+<h1 id="---function-definition-statement">!!!Function Definition Statement</h1>
 <pre class="highlight"><code>// Pyrope
-func = :($a, $b, %o1, %o2):{
-  $a  as (__bits = 2)  
-  $b  as (__bits = 2)
-  %o1 as (__bits = 2)
-  %o2 as (__bits = 2)
-
-  %o1 = $a ^ $b
-  %o2 = $a &amp; $b
+func_xor = :($a, $b, %out):{
+  %out = $a ^ $b
 }
 
 </code></pre>
 <pre class="highlight tab tab-verilog"><code><span class="hljs-comment">// Verilog</span>
+<span class="hljs-keyword">module</span> func_xor(
+  <span class="hljs-keyword">input</span> a,
+  <span class="hljs-keyword">input</span> b,
+  outpout <span class="hljs-keyword">wire</span> out
+);
 
-<span class="hljs-keyword">assign</span> b = (a &gt; <span class="hljs-number">10</span>) ? <span class="hljs-number">3</span> :
-           (a &lt; <span class="hljs-number">1</span> ) ? <span class="hljs-number">2</span> : <span class="hljs-number">1</span> ;
+  <span class="hljs-keyword">assign</span> out = a ^ b;
+
+<span class="hljs-keyword">endmodule</span>
 
 </code></pre>
 <pre class="highlight tab tab-shell"><code>// CFG 
-1   0   0  SEQ0                       
-2   1   0  0     62  <span class="hljs-keyword">if</span>    ___a       
-3   2   0  SEQ1                       
-4   3   0  0     62  &gt;     ___a  a    0d10
-6   2   0  SEQ2                       
-7   6   0  0     62  =     b     0d3  
-9   2   2  0     62  <span class="hljs-keyword">elif</span>  ___b       
-10  2   0  SEQ3                       
-11  10  0  0     62  &lt;     ___b  a    0d1
-13  2   0  SEQ4                       
-14  13  0  0     62  =     b     0d2  
-16  2   0  SEQ5                       
-17  16  0  0     62  =     b     0d1  
+1  0  0  SEQ0                                    
+2  1  0  0     47  ::{  ___a      <span class="hljs-variable">$a</span>  <span class="hljs-variable">$b</span>  %out
+4  2  0  SEQ1                                    
+5  4  0  0     47  ^    ___b      <span class="hljs-variable">$a</span>     <span class="hljs-variable">$b</span>      
+6  4  1  0     47  =    %out      ___b           
+7  1  1  0     47  =    func_xor  \___a          
 </code></pre>
 <pre class="highlight tab tab-cpp"><code><span class="hljs-comment">//C++ </span>
-<span class="hljs-keyword">auto</span> idx_stmts0  = lnast-&gt;add_child(idx_root,   Lnast_node::create_stmts (token_0));
-<span class="hljs-keyword">auto</span> idx_if      = lnast-&gt;add_child(idx_stmts0, Lnast_node::create_if    (token_1));
+<span class="hljs-keyword">auto</span> idx_stmts0  = lnast-&gt;add_child(idx_root,   Lnast_node::create_stmts   (token_0));
+<span class="hljs-keyword">auto</span> idx_func    = lnast-&gt;add_child(idx_stmts0, Lnast_node::create_func_def(token_1));
 
-<span class="hljs-keyword">auto</span> idx_cstmts1 = lnast-&gt;add_child(idx_if,     Lnast_node::create_cstmts(token_2));
-<span class="hljs-keyword">auto</span> idx_gt      = lnast-&gt;add_child(idx_cstmts, Lnast_node::create_gt    (token_3)); 
-<span class="hljs-keyword">auto</span> idx_lhs     = lnast-&gt;add_child(idx_gt,     LNast_node::create_ref   (token_4)); <span class="hljs-comment">//string_view = "___a"</span>
-<span class="hljs-keyword">auto</span> idx_op1     = lnast-&gt;add_child(idx_gt,     LNast_node::create_ref   (token_5)); <span class="hljs-comment">//string_view = "a"</span>
-<span class="hljs-keyword">auto</span> idx_op2     = lnast-&gt;add_child(idx_gt,     LNast_node::create_const (token_6)); <span class="hljs-comment">//string_view = "0d10"</span>
+<span class="hljs-keyword">auto</span> idx_fname   = lnast-&gt;add_child(idx_func,   Lnast_node::create_ref     (token_2)); <span class="hljs-comment">//string_view = "func_xor"</span>
+<span class="hljs-keyword">auto</span> idx_io1     = lnast-&gt;add_child(idx_func,   Lnast_node::create_ref     (token_3)); <span class="hljs-comment">//string_view = "$a"</span>
+<span class="hljs-keyword">auto</span> idx_io2     = lnast-&gt;add_child(idx_func,   Lnast_node::create_ref     (token_4)); <span class="hljs-comment">//string_view = "$b"</span>
+<span class="hljs-keyword">auto</span> idx_io3     = lnast-&gt;add_child(idx_func,   Lnast_node::create_ref     (token_5)); <span class="hljs-comment">//string_view = "$out"</span>
+<span class="hljs-keyword">auto</span> idx_stmts1  = lnast-&gt;add_child(idx_func,   Lnast_node::create_stmts   (token_6));
 
-<span class="hljs-keyword">auto</span> idx_cond1   = lnast-&gt;add_child(idx_if,     Lnast_node::create_cond  (token_7)); <span class="hljs-comment">//string_view = "___a"</span>
+<span class="hljs-keyword">auto</span> idx_xor     = lnast-&gt;add_child(idx_stmts1, Lnast_node::create_xor     (token_7)); 
+<span class="hljs-keyword">auto</span> idx_lhs     = lnast-&gt;add_child(idx_xor,    LNast_node::create_ref     (token_8)); <span class="hljs-comment">//string_view = "___b"</span>
+<span class="hljs-keyword">auto</span> idx_op1     = lnast-&gt;add_child(idx_xor,    LNast_node::create_ref     (token_9)); <span class="hljs-comment">//string_view = "$a"</span>
+<span class="hljs-keyword">auto</span> idx_op2     = lnast-&gt;add_child(idx_xor,    LNast_node::create_ref     (token_a)); <span class="hljs-comment">//string_view = "$b"</span>
 
-<span class="hljs-keyword">auto</span> idx_stmts1  = lnast-&gt;add_child(idx_if,     Lnast_node::create_stmts (token_8));
-<span class="hljs-keyword">auto</span> idx_assign  = lnast-&gt;add_child(idx_stmts1, Lnast_node::create_assign(token_9));
-<span class="hljs-keyword">auto</span> idx_lhs     = lnast-&gt;add_child(idx_assign, LNast_node::create_ref   (token_a)); <span class="hljs-comment">//string_view = "b"</span>
-<span class="hljs-keyword">auto</span> idx_op1     = lnast-&gt;add_child(idx_assign, LNast_node::create_const (token_b)); <span class="hljs-comment">//string_view = "0d3"</span>
-
-<span class="hljs-keyword">auto</span> idx_cstmts2 = lnast-&gt;add_child(idx_if,     Lnast_node::create_cstmts(token_c));
-<span class="hljs-keyword">auto</span> idx_lt      = lnast-&gt;add_child(idx_cstmts, Lnast_node::create_lt    (token_d)); 
-<span class="hljs-keyword">auto</span> idx_lhs     = lnast-&gt;add_child(idx_lt,     LNast_node::create_ref   (token_e)); <span class="hljs-comment">//string_view = "___b"</span>
-<span class="hljs-keyword">auto</span> idx_op1     = lnast-&gt;add_child(idx_lt,     LNast_node::create_ref   (token_f)); <span class="hljs-comment">//string_view = "a"</span>
-<span class="hljs-keyword">auto</span> idx_op2     = lnast-&gt;add_child(idx_lt,     LNast_node::create_const (token_g)); <span class="hljs-comment">//string_view = "0d1"</span>
-
-<span class="hljs-keyword">auto</span> idx_cond2   = lnast-&gt;add_child(idx_if,     Lnast_node::create_cond  (token_h)); <span class="hljs-comment">//string_view = "___b"</span>
-
-<span class="hljs-keyword">auto</span> idx_stmts2  = lnast-&gt;add_child(idx_if,     Lnast_node::create_stmts (token_i));
-<span class="hljs-keyword">auto</span> idx_assign  = lnast-&gt;add_child(idx_stmts2, Lnast_node::create_assign(token_j));
-<span class="hljs-keyword">auto</span> idx_lhs     = lnast-&gt;add_child(idx_assign, LNast_node::create_ref   (token_k)); <span class="hljs-comment">//string_view = "b"</span>
-<span class="hljs-keyword">auto</span> idx_op1     = lnast-&gt;add_child(idx_assign, LNast_node::create_const (token_l)); <span class="hljs-comment">//string_view = "0d2"</span>
-    
-<span class="hljs-keyword">auto</span> idx_stmts3  = lnast-&gt;add_child(idx_if,     Lnast_node::create_stmts (token_m));
-<span class="hljs-keyword">auto</span> idx_assign  = lnast-&gt;add_child(idx_stmts3, Lnast_node::create_assign(token_n));
-<span class="hljs-keyword">auto</span> idx_lhs     = lnast-&gt;add_child(idx_assign, LNast_node::create_ref   (token_o)); <span class="hljs-comment">//string_view = "b"</span>
-<span class="hljs-keyword">auto</span> idx_op1     = lnast-&gt;add_child(idx_assign, LNast_node::create_const (token_p)); <span class="hljs-comment">//string_view = "0d3"</span>
-
+<span class="hljs-keyword">auto</span> idx_assign  = lnast-&gt;add_child(idx_stmts1, Lnast_node::create_assign  (token_b));
+<span class="hljs-keyword">auto</span> idx_lhs     = lnast-&gt;add_child(idx_assign, LNast_node::create_ref     (token_c)); <span class="hljs-comment">//string_view = "%out"</span>
+<span class="hljs-keyword">auto</span> idx_op1     = lnast-&gt;add_child(idx_assign, LNast_node::create_ref     (token_d)); <span class="hljs-comment">//string_view = "___b"</span>
 </code></pre>
 <h1 id="---function-call">!!!Function Call</h1>
 <h1 id="---attribute">!!!Attribute</h1>
