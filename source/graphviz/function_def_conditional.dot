@@ -25,7 +25,7 @@ digraph assign {
   nodec [label = "<a> ref   | <l> %out"];
   noded [label = "<a> ref   | <l> ___b"];
 
-  nodee [label = "<a> condition | <l> true"];
+  nodee [label = "<a> condition | <l> $valid"];
 
   node0:s1  -> node1:a;
   node1:n   -> node2:a;

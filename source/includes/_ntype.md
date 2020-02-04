@@ -193,11 +193,55 @@ auto idx_op6     = lnast->add_child(idx_assign, node_op6);
 statements that have operations must breakdown the operations per type, and then assign the temporal value to the assign node.
 
 
-#!!! Unary Operation Statement
-##!!! Not Operation
+# Unary Operation Statement
+Unary operator is embedded as the prefix of the variable string_view
+## Not Operation
+```coffescript
+// Pyrope
+%out = ~$inp
+```
+
+```verilog
+// Verilog
+input       inp;
+output wire out;
+
+assign out = ~inp;
+```
+
+```shell
+1 0 0 SEQ0
+2 1 1 0    10  = %out  ~$inp
+```
+
+```cpp
+//C++
+auto idx_assign = lnast->add_child(idx_stmts,  Lnast_node::create_assign(token1));
+auto idx_lhs    = lnast->add_child(idx_assign, Lnast_node::create_ref   (token2)); // string_view = %out
+auto idx_op     = lnast->add_child(idx_assign, Lnast_node::create_ref   (token3)); // string_view = ~$inp       
+```
+![assign](source/graphviz/inv.png)
 
 # N-ary Operation Statement
 N-ary operation computes n rhs operands and assign the result to the lhs.
+The n-ary operator includes
+(1)  And Operation
+(2)  Or Operation
+(3)  Xor Operation 
+(4)  Logical And Operation 
+(5)  Logical Or Operation 
+(6)  Plus Operation 
+(7)  Minus Operation 
+(8)  Multiply Operation 
+(9)  Division Operation 
+(10) Equals to Operation 
+(11) Less than Operation 
+(12) Less than or Equals to Operation 
+(13) Greater than Operation 
+(14) Greater than or Equals to Operation 
+
+We takes the "and operation" for demonstration.
+
 ## And Operation 
 ```coffescript
 // Pyrope
@@ -229,38 +273,7 @@ auto idx_assign = lnast->add_child(idx_stmts,  Lnast_node::create_assign(token5)
 auto idx_lhs2   = lnast->add_child(idx_assign, Lnast_node::create_ref   (token6)); // string_view = out
 auto idx_op3    = lnast->add_child(idx_assign, Lnast_node::create_ref   (token7)); // string_view = ___a       
 ```
-
 ![assign](source/graphviz/and.png)
-
-##Or Operation
-
-##Xor Operation 
-
-##Logical And Operation 
-
-##Logical Or Operation 
-
-##Plus Operation 
-
-##Minus Operation 
-
-##Multiply Operation 
-
-##Division Operation 
-
-##Equals to Operation 
-
-##Less than Operation 
-
-##Less than or Equals to Operation 
-
-##Greater than Operation 
-
-##Greater than or Equals to Operation 
-
-
-
-
 
 
 # If Statement
@@ -319,7 +332,7 @@ sub-trees in the following order:
 
   cstmts1 -> condition1 -> stmts1 -> cstmts2 -> condition2 -> stmts2 ...-> stmtsN, 
 
-If there is a final "else" chunk, it won't comes with a corresponding conditionial
+If there is a final "else" chunk, it won't come with a corresponding conditionial
 statements sub-tree and conditional node, see the figure for the detail.
 
 
@@ -381,35 +394,170 @@ auto idx_op1     = lnast->add_child(idx_assign, LNast_node::create_const (token_
 auto idx_cstmts2 = lnast->add_child(idx_if,     Lnast_node::create_cstmts(token_c));
 auto idx_lt      = lnast->add_child(idx_cstmts, Lnast_node::create_lt    (token_d)); 
 auto idx_lhs     = lnast->add_child(idx_lt,     LNast_node::create_ref   (token_e)); //string_view = "___b"
-auto idx_op1     = lnast->add_child(idx_lt,     LNast_node::create_ref   (token_f)); //string_view = "a"
-auto idx_op2     = lnast->add_child(idx_lt,     LNast_node::create_const (token_g)); //string_view = "0d1"
+auto idx_op2     = lnast->add_child(idx_lt,     LNast_node::create_ref   (token_f)); //string_view = "a"
+auto idx_op3     = lnast->add_child(idx_lt,     LNast_node::create_const (token_g)); //string_view = "0d1"
 
 auto idx_cond2   = lnast->add_child(idx_if,     Lnast_node::create_cond  (token_h)); //string_view = "___b"
 
 auto idx_stmts2  = lnast->add_child(idx_if,     Lnast_node::create_stmts (token_i));
 auto idx_assign  = lnast->add_child(idx_stmts2, Lnast_node::create_assign(token_j));
 auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref   (token_k)); //string_view = "b"
-auto idx_op1     = lnast->add_child(idx_assign, LNast_node::create_const (token_l)); //string_view = "0d2"
+auto idx_op4     = lnast->add_child(idx_assign, LNast_node::create_const (token_l)); //string_view = "0d2"
     
 auto idx_stmts3  = lnast->add_child(idx_if,     Lnast_node::create_stmts (token_m));
 auto idx_assign  = lnast->add_child(idx_stmts3, Lnast_node::create_assign(token_n));
 auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref   (token_o)); //string_view = "b"
-auto idx_op1     = lnast->add_child(idx_assign, LNast_node::create_const (token_p)); //string_view = "0d3"
+auto idx_op5     = lnast->add_child(idx_assign, LNast_node::create_const (token_p)); //string_view = "0d3"
 
 ```
 
 ![assign](source/graphviz/full_case_if.png)
 
 
-#!!!Tuple Statement
+#Tuple Statement
+```coffescript
+// Pyrope
+tup = (foo = 1, bar = cat + 2, 3)
 
-#!!!Tuple Concatenation Statement
+```
+
+```verilog
+// Verilog
+
+```
+
+```shell
+// CFG 
+1       0       0       SEQ0
+2       1       0       TUP0    ___a
+3       2       0       0       33      =       foo     0d1
+4       2       1       0       33      +       ___d    cat     0d2
+5       2       2       0       33      =       bar     ___d
+6       2       3       0       33      =       null    0d3
+7       1       4       0       33      =       tup     ___a
+```
+
+```cpp
+//C++ 
+auto idx_tup     = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_1)); //string_view = "___a"
+
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_2));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_3)); //string_view = "foo"
+auto idx_op1     = lnast->add_child(idx_assign, LNast_node::create_const   (token_4)); //string_view = "0d1"
+
+auto idx_plus    = lnast->add_child(idx_tup,    Lnast_node::create_plus    (token_5)); 
+auto idx_lhs     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_6)); //string_view = "___d"
+auto idx_op2     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_7)); //string_view = "cat"
+auto idx_op3     = lnast->add_child(idx_plus,   LNast_node::create_const   (token_8)); //string_view = "0d2"
+
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_9));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_a)); //string_view = "bar"
+auto idx_op4     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_b)); //string_view = "___d"
+
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_c));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_d)); //string_view = "null"
+auto idx_op5     = lnast->add_child(idx_assign, LNast_node::create_const   (token_e)); //string_view = "0d3"
+
+auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_f));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_g)); //string_view = "tup"
+auto idx_op6     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_h)); //string_view = "___a"
+```
+
+![assign](source/graphviz/tuple.png)
+
+##Tuple Concatenation Statement
+
+```coffescript
+// Pyrope
+tup = (foo = 1, bar = cat + 2, 3) 
+tup = tup ++ (4, dog)
+
+```
+
+```verilog
+// Verilog
+
+```
+
+```shell
+// CFG 
+1       0       0       SEQ0
+2       1       0       TUP0    ___a
+3       2       0       0       33      =       foo     0d1
+4       2       1       0       33      +       ___d    cat     0d2
+5       2       2       0       33      =       bar     ___d
+6       2       3       0       33      =       null    0d3
+7       1       4       0       33      =       tup     ___a
+8       1       0       TUP1    ___f
+9       8       5       35      54      =       null    0d4
+10      8       6       35      54      =       null    dog
+11      1       7       35      54      ++      ___e    tup     ___f
+12      1       8       35      54      =       tup     ___e
+```
+
+```cpp
+//C++ 
+auto idx_tup     = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_1)); //string_view = "___a"
+
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_2));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_3)); //string_view = "foo"
+auto idx_op1     = lnast->add_child(idx_assign, LNast_node::create_const   (token_4)); //string_view = "0d1"
+
+auto idx_plus    = lnast->add_child(idx_tup,    Lnast_node::create_plus    (token_5)); 
+auto idx_lhs     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_6)); //string_view = "___d"
+auto idx_op1     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_7)); //string_view = "cat"
+auto idx_op2     = lnast->add_child(idx_plus,   LNast_node::create_const   (token_8)); //string_view = "0d2"
+
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_9));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_a)); //string_view = "bar"
+auto idx_op3     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_b)); //string_view = "___d"
+
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_c));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_d)); //string_view = "null"
+auto idx_op4     = lnast->add_child(idx_assign, LNast_node::create_const   (token_e)); //string_view = "0d3"
+
+auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_f));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_g)); //string_view = "tup"
+auto idx_op5     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_h)); //string_view = "___a"
+
+
+auto idx_tup2    = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_i)); //string_view = "___f"
+
+auto idx_assign  = lnast->add_child(idx_tup2,   Lnast_node::create_assign  (token_j));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_k)); //string_view = "null"
+auto idx_op6     = lnast->add_child(idx_assign, LNast_node::create_const   (token_l)); //string_view = "0d4"
+
+auto idx_assign  = lnast->add_child(idx_tup2,   Lnast_node::create_assign  (token_m));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_n)); //string_view = "null"
+auto idx_op7     = lnast->add_child(idx_assign, LNast_node::create_reg     (token_o)); //string_view = "dog"
+
+
+auto idx_tconcat = lnast->add_child(idx_stmts0,  Lnast_node::create_tuple_concat (token_p)); 
+auto idx_lhs     = lnast->add_child(idx_tconcat, LNast_node::create_ref    (token_q)); //string_view = "___e"
+auto idx_op8     = lnast->add_child(idx_tconcat, LNast_node::create_ref    (token_r)); //string_view = "tup"
+auto idx_op9     = lnast->add_child(idx_tconcat, LNast_node::create_ref    (token_s)); //string_view = "___f"
+
+auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_t));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_u)); //string_view = "tup"
+auto idx_op5     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_v)); //string_view = "___e"
+
+```
+![assign](source/graphviz/tuple_concat.png)
+
 
 #!!!For Loop Statement
 
 #!!!While Loop Statement
 
-#!!!Function Definition Statement
+#Function Definition Statement
+##Basic Function Definition
+A function could be viewed as a module, the arguments of a function represent
+the module IO with the io-prefix, $ for input or % for output. 
+
+In LNAST, a function definition statement is composed as the following node sequence:
+
+function_name -> condition -> statements(function body) -> io_1 -> io_2 -> io_N ...
+
 
 ```coffescript
 // Pyrope
@@ -436,7 +584,7 @@ endmodule
 ```shell
 // CFG 
 1  0  0  SEQ0                                    
-2  1  0  0     47  ::{  ___a      $a  $b  %out
+2  1  0  0     47  ::{  ___a null $a  $b  %out
 4  2  0  SEQ1                                    
 5  4  0  0     47  ^    ___b      $a     $b      
 6  4  1  0     47  =    %out      ___b           
@@ -449,10 +597,11 @@ auto idx_stmts0  = lnast->add_child(idx_root,   Lnast_node::create_stmts   (toke
 auto idx_func    = lnast->add_child(idx_stmts0, Lnast_node::create_func_def(token_1));
 
 auto idx_fname   = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_2)); //string_view = "func_xor"
-auto idx_io1     = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_3)); //string_view = "$a"
-auto idx_io2     = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_4)); //string_view = "$b"
-auto idx_io3     = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_5)); //string_view = "$out"
-auto idx_stmts1  = lnast->add_child(idx_func,   Lnast_node::create_stmts   (token_6));
+auto idx_cond    = lnast->add_child(idx_func,   Lnast_node::create_cond    (token_3)); //string_view = "true"
+auto idx_stmts1  = lnast->add_child(idx_func,   Lnast_node::create_stmts   (token_4));
+auto idx_io1     = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_5)); //string_view = "$a"
+auto idx_io2     = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_6)); //string_view = "$b"
+auto idx_io3     = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_7)); //string_view = "$out"
 
 auto idx_xor     = lnast->add_child(idx_stmts1, Lnast_node::create_xor     (token_7)); 
 auto idx_lhs     = lnast->add_child(idx_xor,    LNast_node::create_ref     (token_8)); //string_view = "___b"
@@ -463,6 +612,70 @@ auto idx_assign  = lnast->add_child(idx_stmts1, Lnast_node::create_assign  (toke
 auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_c)); //string_view = "%out"
 auto idx_op1     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_d)); //string_view = "___b"
 ```
+![assign](source/graphviz/function_def.png)
+
+##Conditional Function Definition
+
+If the HDL support the conditional function definition, for example, Pyrope, we
+have to assign the appropriate condition variable to the condition node. For
+normal case, we assign "true" string_view to this condition node. See figure for
+better understanding.
+
+```coffescript
+// Pyrope
+func_xor = :($a, $b, %out) when $valid:{
+  %out = $a ^ $b
+}
+
+```
+
+```verilog
+// Verilog
+module func_xor(
+  input a,
+  input b,
+  outpout wire out
+);
+
+  assign out = a ^ b;
+
+endmodule
+
+```
+
+```shell
+// CFG 
+1  0  0  SEQ0                                    
+2  1  0  0     47  ::{  ___a      $valid  $a  $b  %out
+4  2  0  SEQ1                                    
+5  4  0  0     47  ^    ___b      $a     $b      
+6  4  1  0     47  =    %out      ___b           
+7  1  1  0     47  =    func_xor  \___a          
+```
+
+```cpp
+//C++ 
+auto idx_stmts0  = lnast->add_child(idx_root,   Lnast_node::create_stmts   (token_0));
+auto idx_func    = lnast->add_child(idx_stmts0, Lnast_node::create_func_def(token_1));
+
+auto idx_fname   = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_2)); //string_view = "func_xor"
+auto idx_cond    = lnast->add_child(idx_func,   Lnast_node::create_cond    (token_3)); //string_view = "$valid"
+auto idx_stmts1  = lnast->add_child(idx_func,   Lnast_node::create_stmts   (token_4));
+auto idx_io1     = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_5)); //string_view = "$a"
+auto idx_io2     = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_6)); //string_view = "$b"
+auto idx_io3     = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_7)); //string_view = "$out"
+
+auto idx_xor     = lnast->add_child(idx_stmts1, Lnast_node::create_xor     (token_7)); 
+auto idx_lhs     = lnast->add_child(idx_xor,    LNast_node::create_ref     (token_8)); //string_view = "___b"
+auto idx_op1     = lnast->add_child(idx_xor,    LNast_node::create_ref     (token_9)); //string_view = "$a"
+auto idx_op2     = lnast->add_child(idx_xor,    LNast_node::create_ref     (token_a)); //string_view = "$b"
+
+auto idx_assign  = lnast->add_child(idx_stmts1, Lnast_node::create_assign  (token_b));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_c)); //string_view = "%out"
+auto idx_op1     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_d)); //string_view = "___b"
+```
+
+![assign](source/graphviz/function_def_conditional.png)
 
 #!!!Function Call
 
