@@ -215,7 +215,7 @@ window.onpopstate = function() {
           </li>
         
           <li>
-            <a href="#---while-loop-statement" class="toc-h1 toc-link" data-title="!!!While Loop Statement">!!!While Loop Statement</a>
+            <a href="#while-loop-statement" class="toc-h1 toc-link" data-title="While Loop Statement">While Loop Statement</a>
             
           </li>
         
@@ -454,22 +454,78 @@ statements that have operations must breakdown the operations per type, and then
 <p><img src="source/graphviz/inv.png" alt="assign"></p>
 <h1 id="n-ary-operation-statement">N-ary Operation Statement</h1>
 <p>N-ary operation computes n rhs operands and assign the result to the lhs.
-The n-ary operator includes
-(1)  And Operation
-(2)  Or Operation
-(3)  Xor Operation
-(4)  Logical And Operation
-(5)  Logical Or Operation
-(6)  Plus Operation
-(7)  Minus Operation
-(8)  Multiply Operation
-(9)  Division Operation
-(10) Equals to Operation
-(11) Less than Operation
-(12) Less than or Equals to Operation
-(13) Greater than Operation
-(14) Greater than or Equals to Operation</p>
-<p>We takes the &quot;and operation&quot; for demonstration.</p>
+The n-ary operator group includes</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Operator</th>
+<th style="text-align:center">Syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">And</td>
+<td style="text-align:center">&amp;</td>
+</tr>
+<tr>
+<td style="text-align:center">Or</td>
+<td style="text-align:center">|</td>
+</tr>
+<tr>
+<td style="text-align:center">Xor</td>
+<td style="text-align:center">^</td>
+</tr>
+<tr>
+<td style="text-align:center">Logical And</td>
+<td style="text-align:center">and</td>
+</tr>
+<tr>
+<td style="text-align:center">Logical Or</td>
+<td style="text-align:center">or</td>
+</tr>
+<tr>
+<td style="text-align:center">Plus</td>
+<td style="text-align:center">+</td>
+</tr>
+<tr>
+<td style="text-align:center">Minus</td>
+<td style="text-align:center">-</td>
+</tr>
+<tr>
+<td style="text-align:center">Multiply</td>
+<td style="text-align:center">*</td>
+</tr>
+<tr>
+<td style="text-align:center">Division</td>
+<td style="text-align:center">/</td>
+</tr>
+<tr>
+<td style="text-align:center">Equals to</td>
+<td style="text-align:center">==</td>
+</tr>
+<tr>
+<td style="text-align:center">Less than</td>
+<td style="text-align:center">&lt;</td>
+</tr>
+<tr>
+<td style="text-align:center">Less than or Equals to</td>
+<td style="text-align:center">&lt;=</td>
+</tr>
+<tr>
+<td style="text-align:center">Greater than</td>
+<td style="text-align:center">&gt;</td>
+</tr>
+<tr>
+<td style="text-align:center">Greater than or Equals to</td>
+<td style="text-align:center">&gt;=</td>
+</tr>
+<tr>
+<td style="text-align:center">Tuple concatenation</td>
+<td style="text-align:center">++</td>
+</tr>
+</tbody>
+</table>
+<p>We take the &quot;And Operator&quot; for explaination.</p>
 <h2 id="and-operation">And Operation</h2>
 <pre class="highlight"><code>// Pyrope
 out = a &amp; b &amp; c
@@ -723,7 +779,79 @@ tup = tup ++ (4, dog)
 </code></pre>
 <p><img src="source/graphviz/tuple_concat.png" alt="assign"></p>
 <h1 id="---for-loop-statement">!!!For Loop Statement</h1>
-<h1 id="---while-loop-statement">!!!While Loop Statement</h1>
+<pre class="highlight"><code>// Pyrope
+for i in (0..3) {
+  tup_foo[i] = tup_bar[3-i]
+}
+
+</code></pre>
+<pre class="highlight tab tab-verilog"><code><span class="hljs-comment">// Verilog</span>
+</code></pre>
+<pre class="highlight tab tab-shell"><code>// CFG 
+1       0       0       SEQ0
+2       1       0       TUP0    ___b
+3       2       0       0       48      ..      ___c    0d0     0d3
+4       1       1       0       48      <span class="hljs-keyword">in</span>      ___a    i       ___b
+5       1       2       0       48      <span class="hljs-keyword">for</span>     ___a
+7       5       0       SEQ1
+8       7       0       0       48      []      ___d    tup_foo i
+9       7       1       0       48      -       ___g    0d3     i
+10      7       2       0       48      []      ___f    tup_bar ___g
+11      7       3       0       48      .()     ___e    ___f
+12      7       4       0       48      =       ___d    ___e
+</code></pre>
+<pre class="highlight tab tab-cpp"><code><span class="hljs-comment">//C++ </span>
+<span class="hljs-keyword">auto</span> idx_func    = lnast-&gt;add_child(idx_stmts0, Lnast_node::create_func_def(token_1));
+
+<span class="hljs-keyword">auto</span> idx_fname   = lnast-&gt;add_child(idx_func,   Lnast_node::create_ref     (token_2)); <span class="hljs-comment">//string_view = "func_xor"</span>
+<span class="hljs-keyword">auto</span> idx_cond    = lnast-&gt;add_child(idx_func,   Lnast_node::create_cond    (token_3)); <span class="hljs-comment">//string_view = "true"</span>
+<span class="hljs-keyword">auto</span> idx_stmts1  = lnast-&gt;add_child(idx_func,   Lnast_node::create_stmts   (token_4));
+<span class="hljs-keyword">auto</span> idx_io1     = lnast-&gt;add_child(idx_func,   Lnast_node::create_ref     (token_5)); <span class="hljs-comment">//string_view = "$a"</span>
+<span class="hljs-keyword">auto</span> idx_io2     = lnast-&gt;add_child(idx_func,   Lnast_node::create_ref     (token_6)); <span class="hljs-comment">//string_view = "$b"</span>
+<span class="hljs-keyword">auto</span> idx_io3     = lnast-&gt;add_child(idx_func,   Lnast_node::create_ref     (token_7)); <span class="hljs-comment">//string_view = "$out"</span>
+
+<span class="hljs-keyword">auto</span> idx_xor     = lnast-&gt;add_child(idx_stmts1, Lnast_node::create_xor     (token_7)); 
+<span class="hljs-keyword">auto</span> idx_lhs     = lnast-&gt;add_child(idx_xor,    LNast_node::create_ref     (token_8)); <span class="hljs-comment">//string_view = "___b"</span>
+<span class="hljs-keyword">auto</span> idx_op1     = lnast-&gt;add_child(idx_xor,    LNast_node::create_ref     (token_9)); <span class="hljs-comment">//string_view = "$a"</span>
+<span class="hljs-keyword">auto</span> idx_op2     = lnast-&gt;add_child(idx_xor,    LNast_node::create_ref     (token_a)); <span class="hljs-comment">//string_view = "$b"</span>
+
+<span class="hljs-keyword">auto</span> idx_assign  = lnast-&gt;add_child(idx_stmts1, Lnast_node::create_assign  (token_b));
+<span class="hljs-keyword">auto</span> idx_lhs     = lnast-&gt;add_child(idx_assign, LNast_node::create_ref     (token_c)); <span class="hljs-comment">//string_view = "%out"</span>
+<span class="hljs-keyword">auto</span> idx_op1     = lnast-&gt;add_child(idx_assign, LNast_node::create_ref     (token_d)); <span class="hljs-comment">//string_view = "___b"</span>
+</code></pre>
+<p><img src="source/graphviz/for.png" alt="assign"></p>
+<h1 id="while-loop-statement">While Loop Statement</h1>
+<pre class="highlight"><code>// Pyrope
+for i in (0..3) {
+  tup_foo[i] = tup_bar[3-i]
+}
+
+</code></pre>
+<pre class="highlight tab tab-verilog"><code><span class="hljs-comment">// Verilog</span>
+</code></pre>
+<pre class="highlight tab tab-shell"><code>// CFG 
+1       0       0       SEQ0
+2       1       0       0       58      &gt;       ___a    i       0d0
+3       1       1       0       58      <span class="hljs-keyword">while</span>   ___a
+5       3       0       SEQ1
+6       5       0       0       58      []      ___b    tup_foo i
+7       5       1       0       58      -       ___e    0d3     i
+8       5       2       0       58      []      ___d    tup_bar ___e
+9       5       3       0       58      .()     ___c    ___d
+10      5       4       0       58      =       ___b    ___c
+11      5       5       0       58      -       ___f    i       0d1
+12      5       6       0       58      =       i       ___f
+</code></pre>
+<pre class="highlight tab tab-cpp"><code><span class="hljs-comment">//C++ </span>
+<span class="hljs-keyword">auto</span> idx_while   = lnast-&gt;add_child(idx_stmts0,  Lnast_node::create_while   (token_0));
+<span class="hljs-keyword">auto</span> idx_cond    = lnast-&gt;add_child(idx_while,   Lnast_node::create_cond    (token_1)); <span class="hljs-comment">//string_view = "___a"</span>
+<span class="hljs-keyword">auto</span> idx_stmts1  = lnast-&gt;add_child(idx_while,   Lnast_node::create_stmts   (token_2));
+<span class="hljs-keyword">auto</span> idx_exp1    = lnast-&gt;add_child(idx_stmts1,  Lnast_node::create_select  (token_3)); <span class="hljs-comment">//string_view = "___b"</span>
+.
+.
+.
+</code></pre>
+<p><img src="source/graphviz/while.png" alt="assign"></p>
 <h1 id="function-definition-statement">Function Definition Statement</h1>
 <h2 id="basic-function-definition">Basic Function Definition</h2>
 <p>A function could be viewed as a module, the arguments of a function represent

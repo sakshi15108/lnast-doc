@@ -224,23 +224,27 @@ auto idx_op     = lnast->add_child(idx_assign, Lnast_node::create_ref   (token3)
 
 # N-ary Operation Statement
 N-ary operation computes n rhs operands and assign the result to the lhs.
-The n-ary operator includes
-(1)  And Operation
-(2)  Or Operation
-(3)  Xor Operation 
-(4)  Logical And Operation 
-(5)  Logical Or Operation 
-(6)  Plus Operation 
-(7)  Minus Operation 
-(8)  Multiply Operation 
-(9)  Division Operation 
-(10) Equals to Operation 
-(11) Less than Operation 
-(12) Less than or Equals to Operation 
-(13) Greater than Operation 
-(14) Greater than or Equals to Operation 
+The n-ary operator group includes
 
-We takes the "and operation" for demonstration.
+| Operator | Syntax | 
+|:-----------:|:-------------:|
+| And        | &       |
+| Or         | \|       |
+| Xor          | ^ |
+| Logical And          | and   |
+| Logical Or          | or |
+| Plus          | +     |
+| Minus | - |
+| Multiply | * |
+| Division | / |
+| Equals to | == |
+| Less than | < |
+| Less than or Equals to | <= |
+| Greater than | > |
+| Greater than or Equals to | >= |
+| Tuple concatenation | ++ |
+
+We take the "And Operator" for explaination.
 
 ## And Operation 
 ```coffescript
@@ -546,8 +550,97 @@ auto idx_op5     = lnast->add_child(idx_assign, LNast_node::create_ref     (toke
 
 
 #!!!For Loop Statement
+```coffescript
+// Pyrope
+for i in (0..3) {
+  tup_foo[i] = tup_bar[3-i]
+}
 
-#!!!While Loop Statement
+```
+
+```verilog
+// Verilog
+```
+
+```shell
+// CFG 
+1       0       0       SEQ0
+2       1       0       TUP0    ___b
+3       2       0       0       48      ..      ___c    0d0     0d3
+4       1       1       0       48      in      ___a    i       ___b
+5       1       2       0       48      for     ___a
+7       5       0       SEQ1
+8       7       0       0       48      []      ___d    tup_foo i
+9       7       1       0       48      -       ___g    0d3     i
+10      7       2       0       48      []      ___f    tup_bar ___g
+11      7       3       0       48      .()     ___e    ___f
+12      7       4       0       48      =       ___d    ___e
+```
+
+```cpp
+//C++ 
+auto idx_func    = lnast->add_child(idx_stmts0, Lnast_node::create_func_def(token_1));
+
+auto idx_fname   = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_2)); //string_view = "func_xor"
+auto idx_cond    = lnast->add_child(idx_func,   Lnast_node::create_cond    (token_3)); //string_view = "true"
+auto idx_stmts1  = lnast->add_child(idx_func,   Lnast_node::create_stmts   (token_4));
+auto idx_io1     = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_5)); //string_view = "$a"
+auto idx_io2     = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_6)); //string_view = "$b"
+auto idx_io3     = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_7)); //string_view = "$out"
+
+auto idx_xor     = lnast->add_child(idx_stmts1, Lnast_node::create_xor     (token_7)); 
+auto idx_lhs     = lnast->add_child(idx_xor,    LNast_node::create_ref     (token_8)); //string_view = "___b"
+auto idx_op1     = lnast->add_child(idx_xor,    LNast_node::create_ref     (token_9)); //string_view = "$a"
+auto idx_op2     = lnast->add_child(idx_xor,    LNast_node::create_ref     (token_a)); //string_view = "$b"
+
+auto idx_assign  = lnast->add_child(idx_stmts1, Lnast_node::create_assign  (token_b));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_c)); //string_view = "%out"
+auto idx_op1     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_d)); //string_view = "___b"
+```
+![assign](source/graphviz/for.png)
+
+#While Loop Statement
+
+```coffescript
+// Pyrope
+for i in (0..3) {
+  tup_foo[i] = tup_bar[3-i]
+}
+
+```
+
+```verilog
+// Verilog
+```
+
+```shell
+// CFG 
+1       0       0       SEQ0
+2       1       0       0       58      >       ___a    i       0d0
+3       1       1       0       58      while   ___a
+5       3       0       SEQ1
+6       5       0       0       58      []      ___b    tup_foo i
+7       5       1       0       58      -       ___e    0d3     i
+8       5       2       0       58      []      ___d    tup_bar ___e
+9       5       3       0       58      .()     ___c    ___d
+10      5       4       0       58      =       ___b    ___c
+11      5       5       0       58      -       ___f    i       0d1
+12      5       6       0       58      =       i       ___f
+```
+
+```cpp
+//C++ 
+auto idx_while   = lnast->add_child(idx_stmts0,  Lnast_node::create_while   (token_0));
+auto idx_cond    = lnast->add_child(idx_while,   Lnast_node::create_cond    (token_1)); //string_view = "___a"
+auto idx_stmts1  = lnast->add_child(idx_while,   Lnast_node::create_stmts   (token_2));
+auto idx_exp1    = lnast->add_child(idx_stmts1,  Lnast_node::create_select  (token_3)); //string_view = "___b"
+.
+.
+.
+```
+![assign](source/graphviz/while.png)
+
+
 
 #Function Definition Statement
 ##Basic Function Definition
