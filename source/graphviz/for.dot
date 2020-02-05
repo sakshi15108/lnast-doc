@@ -1,0 +1,55 @@
+digraph assign {
+  rankdir=LR
+  bgcolor="transparent"
+
+  node  [fontname = "helvetica", shape=record, style="rounded", penwidth = 2];
+  edge  [fontname = "helvetica", color="#142b30", arrowhead="normal", penwidth = 2];
+  graph [fontname = "helvetica"];
+
+  node0 [label = "<a> stmts | <s1> statement | <s2> statement | <s3> statement"];
+  node1 [label = "<a> range | <l>  lhs | <r1> range_start | <r2> range_end"];
+  node2 [label = "<a> ref   | <l> ___c"];
+  node3 [label = "<a> const | <l> 0d0"];
+  node4 [label = "<a> const | <l> 0d3"];
+
+  node5 [label = "<a> tup | <n> tup_name | <kv1> key-value"];
+  node6 [label = "<a> ref | <l> ___b"];
+
+  node7 [label = "<a> assign | <l> lhs  | <r> rhs"];
+  node8 [label = "<a> ref   | <l> null"];
+  node9 [label = "<a> ref   | <l> ___c"];
+
+  nodea [label = "<a> for | <stmts0> stmts | <itr> iterator | <itrr> iterator_range"];
+  nodeb [label = "<a> stmts | <s1> statement | <s2> statement | <s3> statement | <s4> statement"];
+  nodec [label = "<a> ref | <l> i"];
+  noded [label = "<a> ref | <l> ___b"];
+
+  nodee [label = "<a> select | <l> lhs | <r1> op1 | <r2> op2"];
+  nodef [label = "<a> ref | <l> ___d"];
+  nodeg [label = "<a> ref | <l> tup_foo"];
+  nodeh [label = "<a> ref | <l> i"];
+
+  node0:s1 -> node1:a;
+  node0:s2 -> node5:a;
+  node0:s3 -> nodea:a;
+
+  node1:l  -> node2:a;
+  node1:r1 -> node3:a;
+  node1:r2 -> node4:a;
+  
+  node5:n  -> node6:a;
+  node5:kv1 -> node7:a;
+
+  node7:l -> node8:a;
+  node7:r -> node9:a;
+
+  nodea:stmts0 -> nodeb:a;
+
+  nodeb:s1 -> nodee:a;
+
+  nodee:l -> nodef:a;
+  nodee:r1 -> nodeg:a;
+  nodee:r2 -> nodeh:a;
+  
+
+}
