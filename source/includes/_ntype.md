@@ -418,48 +418,52 @@ auto idx_op5     = lnast->add_child(idx_assign, LNast_node::create_const (token_
 ![assign](source/graphviz/full_case_if.png)
 
 
-#Tuple Statement
+#!!!Tuple Statement
 ```coffescript
 // Pyrope
-tup = (foo = 1, bar = cat + 2, 3)
+tup = (foo = 1, bar = cat + 2)
 ```
 
 ```verilog
 // Verilog
+typede packed {
+  logic  foo;
+  logic [4:0]  bar;
+} tup_t;
 
+tup_t tup;
+
+always_comb begin
+  tup.foo = 1;
+  tup.bar = cat + 2;
+end
 ```
 
 ```shell
 // CFG 
-1       0       0       SEQ0
-2       1       0       TUP0    ___a
-3       2       0       0       33      =       foo     0d1
-4       2       1       0       33      +       ___d    cat     0d2
-5       2       2       0       33      =       bar     ___d
-6       2       3       0       33      =       null    0d3
-7       1       4       0       33      =       tup     ___a
+1       0       x       SEQ0
+4       1       x       0       33      +       ___d    cat     0d2
+2       1       x       TUP0    ___a
+3       2       x       0       33      =       foo     0d1
+5       2       x       0       33      =       bar     ___d
+7       1       x       0       33      =       tup     ___a
 ```
 
 ```cpp
 //C++ 
-auto idx_tup     = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_1)); //string_view = "___a"
+auto idx_plus    = lnast->add_child(idx_stmts0, Lnast_node::create_plus    (token_1)); 
+auto idx_lhs     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_2)); //string_view = "___d"
+auto idx_op1     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_3)); //string_view = "cat"
+auto idx_op2     = lnast->add_child(idx_plus,   LNast_node::create_const   (token_4)); //string_view = "0d2"
 
-auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_2));
-auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_3)); //string_view = "foo"
-auto idx_op1     = lnast->add_child(idx_assign, LNast_node::create_const   (token_4)); //string_view = "0d1"
-
-auto idx_plus    = lnast->add_child(idx_tup,    Lnast_node::create_plus    (token_5)); 
-auto idx_lhs     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_6)); //string_view = "___d"
-auto idx_op2     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_7)); //string_view = "cat"
-auto idx_op3     = lnast->add_child(idx_plus,   LNast_node::create_const   (token_8)); //string_view = "0d2"
+auto idx_tup     = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_5)); //string_view = "___a"
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_6));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_7)); //string_view = "foo"
+auto idx_op3     = lnast->add_child(idx_assign, LNast_node::create_const   (token_8)); //string_view = "0d1"
 
 auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_9));
 auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_a)); //string_view = "bar"
 auto idx_op4     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_b)); //string_view = "___d"
-
-auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_c));
-auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_d)); //string_view = "null"
-auto idx_op5     = lnast->add_child(idx_assign, LNast_node::create_const   (token_e)); //string_view = "0d3"
 
 auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_f));
 auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_g)); //string_view = "tup"
@@ -472,7 +476,7 @@ auto idx_op6     = lnast->add_child(idx_assign, LNast_node::create_ref     (toke
 
 ```coffescript
 // Pyrope
-tup = (foo = 1, bar = cat + 2, 3) 
+tup = (foo = 1, bar = cat + 2) 
 tup = tup ++ (4, dog)
 
 ```
@@ -484,65 +488,57 @@ tup = tup ++ (4, dog)
 
 ```shell
 // CFG 
-1       0       0       SEQ0
-2       1       0       TUP0    ___a
-3       2       0       0       33      =       foo     0d1
-4       2       1       0       33      +       ___d    cat     0d2
-5       2       2       0       33      =       bar     ___d
-6       2       3       0       33      =       null    0d3
-7       1       4       0       33      =       tup     ___a
-8       1       0       TUP1    ___f
-9       8       5       35      54      =       null    0d4
-10      8       6       35      54      =       null    dog
-11      1       7       35      54      ++      ___e    tup     ___f
-12      1       8       35      54      =       tup     ___e
+1       0       x       SEQ0
+4       1       x       0       33      +       ___d    cat     0d2
+2       1       x       TUP0    ___a
+3       2       x       0       33      =       foo     0d1
+5       2       x       0       33      =       bar     ___d
+6       1       x       0       33      =       tup     ___a
+7       1       x       TUP1    ___f
+8       7       x       35      54      =       null    0d4
+9       7       x       35      54      =       null    dog
+10      1       x       35      54      ++      ___e    tup     ___f
+11      1       x       35      54      =       tup     ___e
 ```
 
 ```cpp
 //C++ 
-auto idx_tup     = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_1)); //string_view = "___a"
+auto idx_plus    = lnast->add_child(idx_stmts0, Lnast_node::create_plus    (token_1)); 
+auto idx_lhs     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_2)); //string_view = "___d"
+auto idx_op1     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_3)); //string_view = "cat"
+auto idx_op2     = lnast->add_child(idx_plus,   LNast_node::create_const   (token_4)); //string_view = "0d2"
 
-auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_2));
-auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_3)); //string_view = "foo"
-auto idx_op1     = lnast->add_child(idx_assign, LNast_node::create_const   (token_4)); //string_view = "0d1"
-
-auto idx_plus    = lnast->add_child(idx_tup,    Lnast_node::create_plus    (token_5)); 
-auto idx_lhs     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_6)); //string_view = "___d"
-auto idx_op1     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_7)); //string_view = "cat"
-auto idx_op2     = lnast->add_child(idx_plus,   LNast_node::create_const   (token_8)); //string_view = "0d2"
+auto idx_tup     = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_5)); //string_view = "___a"
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_6));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_7)); //string_view = "foo"
+auto idx_op3     = lnast->add_child(idx_assign, LNast_node::create_const   (token_8)); //string_view = "0d1"
 
 auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_9));
 auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_a)); //string_view = "bar"
-auto idx_op3     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_b)); //string_view = "___d"
-
-auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_c));
-auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_d)); //string_view = "null"
-auto idx_op4     = lnast->add_child(idx_assign, LNast_node::create_const   (token_e)); //string_view = "0d3"
+auto idx_op4     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_b)); //string_view = "___d"
 
 auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_f));
 auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_g)); //string_view = "tup"
-auto idx_op5     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_h)); //string_view = "___a"
-
+auto idx_op6     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_h)); //string_view = "___a"
 
 auto idx_tup2    = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_i)); //string_view = "___f"
-
 auto idx_assign  = lnast->add_child(idx_tup2,   Lnast_node::create_assign  (token_j));
 auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_k)); //string_view = "null"
-auto idx_op6     = lnast->add_child(idx_assign, LNast_node::create_const   (token_l)); //string_view = "0d4"
+auto idx_op7     = lnast->add_child(idx_assign, LNast_node::create_const   (token_l)); //string_view = "0d4"
 
 auto idx_assign  = lnast->add_child(idx_tup2,   Lnast_node::create_assign  (token_m));
 auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_n)); //string_view = "null"
-auto idx_op7     = lnast->add_child(idx_assign, LNast_node::create_reg     (token_o)); //string_view = "dog"
+auto idx_op8     = lnast->add_child(idx_assign, LNast_node::create_reg     (token_o)); //string_view = "dog"
 
 
 auto idx_tconcat = lnast->add_child(idx_stmts0,  Lnast_node::create_tuple_concat (token_p)); 
 auto idx_lhs     = lnast->add_child(idx_tconcat, LNast_node::create_ref    (token_q)); //string_view = "___e"
-auto idx_op8     = lnast->add_child(idx_tconcat, LNast_node::create_ref    (token_r)); //string_view = "tup"
-auto idx_op9     = lnast->add_child(idx_tconcat, LNast_node::create_ref    (token_s)); //string_view = "___f"
+auto idx_op9     = lnast->add_child(idx_tconcat, LNast_node::create_ref    (token_r)); //string_view = "tup"
+auto idx_opa     = lnast->add_child(idx_tconcat, LNast_node::create_ref    (token_s)); //string_view = "___f"
 
 auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_t));
 auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_u)); //string_view = "tup"
-auto idx_op5     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_v)); //string_view = "___e"
+auto idx_opb     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_v)); //string_view = "___e"
 
 ```
 ![assign](source/graphviz/tuple_concat.png)

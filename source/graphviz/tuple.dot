@@ -8,53 +8,49 @@ digraph assign {
 
   
 
-  node_0 [label = "<a> stmts | <s1> statement | <s2> statement"];
-  node_1 [label = "<a> tup   | <n> tup_name | <s1> statement | <s2> statement |  <s3> statement | <s4> statement"]
-
-  node_1_1 [label = "<a> ref   | <l> ___a"];
-
-  node_2 [label = "<a> assign | <l> lhs  | <r> rhs"];
-  node_3 [label = "<a> ref   | <l> foo"];
-  node_4 [label = "<a> const | <l> 0d1"];
+  node_0 [label = "<a> stmts | <s1> statement | <s2> statement | <s3> statement"];
 
   node_5 [label = "<a> plus | <l> lhs | <r1> op1 | <r2> op2 "];
   node_6 [label = "<a> ref   | <l> ___d"];
   node_7 [label = "<a> ref   | <l> cat"];
   node_8 [label = "<a> const   | <l> 0d2"];
 
+  node_1 [label = "<a> tup   | <n> tup_name | <kv1> key-value | <kv2> key-value"]
+  node_1_1 [label = "<a> ref   | <l> ___a"];
+
+  node_2 [label = "<a> assign | <l> lhs  | <r> rhs"];
+  node_3 [label = "<a> ref   | <l> foo"];
+  node_4 [label = "<a> const | <l> 0d1"];
+
   node_9 [label = "<a> assign | <l> lhs  | <r> rhs"];
   node_a [label = "<a> ref    | <l> bar"];
   node_b [label = "<a> ref    | <l> ___d"];
 
-  node_c [label = "<a> assign | <l> lhs  | <r> rhs"];
-  node_d [label = "<a> ref   | <l> null"];
-  node_e [label = "<a> const   | <l> 0d3"];
 
   node_f [label = "<a> assign | <l> lhs  | <r> rhs"];
   node_g [label = "<a> ref   | <l> tup"];
   node_h [label = "<a> ref   | <l> ___a"];
 
-  node_0:s1  -> node_1:a;
-  node_0:s2  -> node_f:a;
+  node_0:s1  -> node_5:a
+  node_0:s2  -> node_1:a;
+  node_0:s3  -> node_f:a;
+  
+
+  node_5:l  -> node_6:a;
+  node_5:r1 -> node_7:a;
+  node_5:r2 -> node_8:a;
+
 
   node_1:n  -> node_1_1:a;
-  node_1:s1 -> node_2:a;
-  node_1:s2 -> node_5:a;
-  node_1:s3 -> node_9:a;
-  node_1:s4 -> node_c:a;
+  node_1:kv1 -> node_2:a;
+  node_1:kv2 -> node_9:a;
 
   node_2:l -> node_3:a;
   node_2:r -> node_4:a;
   
-  node_5:l  -> node_6:a;
-  node_5:r1 -> node_7:a;
-  node_5:r2 -> node_8:a;
   
   node_9:l -> node_a:a;
   node_9:r -> node_b:a;
-
-  node_c:l -> node_d:a;
-  node_c:r -> node_e:a;
 
   node_f:l -> node_g:a;
   node_f:r -> node_h:a;
