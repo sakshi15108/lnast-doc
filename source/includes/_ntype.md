@@ -422,7 +422,6 @@ auto idx_op5     = lnast->add_child(idx_assign, LNast_node::create_const (token_
 ```coffescript
 // Pyrope
 tup = (foo = 1, bar = cat + 2, 3)
-
 ```
 
 ```verilog
@@ -553,7 +552,7 @@ auto idx_op5     = lnast->add_child(idx_assign, LNast_node::create_ref     (toke
 ```coffescript
 // Pyrope
 for i in (0..3) {
-  tup_foo[i] = tup_bar[3-i]
+  tuple_foo[i] = tuple_bar[3-i]
 }
 
 ```
@@ -573,8 +572,7 @@ for i in (0..3) {
 8       7       0       0       48      []      ___d    tup_foo i
 9       7       1       0       48      -       ___g    0d3     i
 10      7       2       0       48      []      ___f    tup_bar ___g
-11      7       3       0       48      .()     ___e    ___f
-12      7       4       0       48      =       ___d    ___e
+11      7       4       0       48      =       ___d    ___f
 ```
 
 ```cpp
@@ -622,10 +620,9 @@ for i in (0..3) {
 6       5       0       0       58      []      ___b    tup_foo i
 7       5       1       0       58      -       ___e    0d3     i
 8       5       2       0       58      []      ___d    tup_bar ___e
-9       5       3       0       58      .()     ___c    ___d
-10      5       4       0       58      =       ___b    ___c
-11      5       5       0       58      -       ___f    i       0d1
-12      5       6       0       58      =       i       ___f
+9       5       4       0       58      =       ___b    ___d
+10      5       5       0       58      -       ___f    i       0d1
+11      5       6       0       58      =       i       ___f
 ```
 
 ```cpp
