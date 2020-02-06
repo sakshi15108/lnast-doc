@@ -872,6 +872,10 @@ auto idx_lhs    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token
 auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_p)); //string_view = "___d"
 
 ```
+
+![assign](source/graphviz/function_call.png)
+
+
 #!!!Attribute 
 
 #!!!Statements (code block for same scopes)
