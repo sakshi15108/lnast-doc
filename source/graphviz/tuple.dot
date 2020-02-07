@@ -15,7 +15,7 @@ digraph assign {
   node_7 [label = "<a> ref   | <l> cat"];
   node_8 [label = "<a> const   | <l> 0d2"];
 
-  node_1 [label = "<a> tup   | <n> tup_name | <kv1> key-value | <kv2> key-value"]
+  node_1 [label = "<a> tuple   | <n> tuple_name | <kv1> key-value | <kv2> key-value"]
   node_1_1 [label = "<a> ref   | <l> ___a"];
 
   node_2 [label = "<a> assign | <l> lhs  | <r> rhs"];

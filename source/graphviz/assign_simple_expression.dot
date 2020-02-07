@@ -7,12 +7,12 @@ digraph assign {
   graph [fontname = "helvetica"];
 
 
-  nodea0 [label = "<a> - | <l> lhs  | <r1> op1 | <r2> op2 "];
+  nodea0 [label = "<a> minus | <l> lhs  | <r1> op1 | <r2> op2 "];
   nodea1 [label = "<a> ref   | <l> ___a"];
   nodea2 [label = "<a> ref   | <l> x"];
   nodea3 [label = "<a> const | <l> 0d1"];
 
-  nodeb0 [label = "<a> + | <l> lhs  | <r1> op1 | <r2> op2 | <r3> op3 "];
+  nodeb0 [label = "<a> plus | <l> lhs  | <r1> op1 | <r2> op2 | <r3> op3 "];
   nodeb1 [label = "<a> ref   | <l> ___b"];
   nodeb2 [label = "<a> ref   | <l> ___a"];
   nodeb3 [label = "<a> const | <l> 0d3"];

@@ -721,13 +721,14 @@ auto idx_op1     = lnast->add_child(idx_assign, LNast_node::create_ref     (toke
 ##Conditional Function Definition
 
 If the HDL support the conditional function definition, for example, Pyrope, we
-have to assign the appropriate condition variable to the condition node. For
-normal case, we assign "true" string_view to this condition node. See figure for
-better understanding.
+have to assign the appropriate condition variable to the condition node. In the
+example of the following Pyrope code, the func_xor function will only be
+declared when its intput $valid is true. For normal case, we assign "true"
+string_view to this condition node. See figure for better understanding.
 
 ```coffescript
 // Pyrope
-func_xor = :($a, $b, %out) when $valid:{
+func_xor = :($a, $b, $valid, %out) when $valid:{
   %out = $a ^ $b
 }
 
@@ -750,7 +751,7 @@ endmodule
 ```shell
 // CFG 
 1  0  0  SEQ0                                    
-2  1  0  0     47  ::{  ___a      $valid  $a  $b  %out
+2  1  0  0     47  ::{  ___a      $valid  $a  $b  $valid %out
 4  2  0  SEQ1                                    
 5  4  0  0     47  ^    ___b      $a     $b      
 6  4  1  0     47  =    %out      ___b           
@@ -786,6 +787,7 @@ auto idx_op1     = lnast->add_child(idx_assign, Lnast_node::create_ref     (toke
 ![assign](source/graphviz/function_def_conditional.png)
 
 #Function Call
+##Implicit Function Argument Assignment
 ```coffescript
 // Pyrope
 func_xor = :($a, $b, %out):{
@@ -859,8 +861,14 @@ auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token
 auto idx_fcall  = lnast->add_child(idx_stmts0, Lnast_node::create_func_call(token_e));
 auto idx_lhs    = lnast->add_child(idx_fcall,  Lnast_node::create_ref     (token_f)); //string_view = "my_xor"
 auto idx_target = lnast->add_child(idx_fcall,  Lnast_node::create_ref     (token_g)); //string_view = "func_xor"
-auto idx_inp1   = lnast->add_child(idx_fcall,  Lnast_node::create_ref     (token_h)); //string_view = "$foo"
-auto idx_inp2   = lnast->add_child(idx_fcall,  Lnast_node::create_ref     (token_i)); //string_view = "$bar"
+auto idx_assign = lnast->add_child(idx_fcall,  Lnast_node::create_ref     (token_h)); 
+aito idx_lhs    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_i)); //string_view = "null"
+auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_d)); //string_view = "$foo"
+
+auto idx_assign = lnast->add_child(idx_fcall,  Lnast_node::create_ref     (token_h)); 
+aito idx_lhs    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_i)); //string_view = "null"
+auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_d)); //string_view = "$bar"
+
 
 auto idx_dot    = lnast->add_child(idx_stmts0, Lnast_node::create_dot     (token_j)); 
 auto idx_lhs    = lnast->add_child(idx_dot   , Lnast_node::create_ref     (token_k)); //string_view = "___d"
@@ -873,11 +881,74 @@ auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token
 
 ```
 
-![assign](source/graphviz/function_call.png)
+![assign](source/graphviz/function_call_imp.png)
+
+##!!!Explicit Function Argument Assignment
+```coffescript
+// Pyrope
+func_xor = :($a, $b, %out):{
+  %out = $a ^ $b
+}
+
+my_xor = func_xor(a = $foo, b = $bar)
+%out = my_xor.out
+```
+
+```verilog
+// Verilog
+module func_xor(
+  input a,
+  input b,
+  outpout wire out
+);
+
+  assign out = a ^ b;
+
+endmodule
+
+module top(
+  input foo,
+  input bar,
+  output wire out
+);
+
+  func_xor my_xor(.a(foo), .b(bar), .out(out))
+
+endmodule
 
 
-#!!!Attribute 
+```
 
-#!!!Statements (code block for same scopes)
+```shell
+// CFG 
 
-#!!!Assertion
+1       0       0       SEQ0
+2       1       0       0       47      ::{     ___a    null    $a      $b   %out
+4       2       0       SEQ1
+5       4       0       0       47      ^       ___b    $a      $b
+6       4       1       0       47      =       %out    ___b
+7       1       1       0       47      =       func_xor        \___a
+8       1       2       49      86      .()     ___e    $foo
+9       1       3       49      86      =       a       ___e
+10      1       4       49      86      .()     ___g    $bar
+11      1       5       49      86      =       b       ___g
+12      1       6       49      86      .()     ___c    func_xor        a    b
+13      1       7       49      86      =       my_xor  ___c
+14      1       8       87      104     .       ___i    my_xor  out
+15      1       9       87      104     .()     ___h    ___i
+16      1       10      87      104     =       %out    ___h
+
+
+//FIXME: there will be a variable reassignment of variable a in top scope, the 
+my_xor = func_xor(a = $foo, b = $bar)
+should be expressed as a tuple sequence!?
+
+```
+
+```cpp
+//C++ 
+TODO
+
+
+```
+![assign](source/graphviz/function_call_exp.png)

@@ -9,10 +9,12 @@ digraph assign {
   
 
   node0 [label = "<a> stmts | <s1> statement"];
-  node1 [label = "<a> func_def | <n> func_name | <cond> condition | <stmts> stmts |<io1> input | <io2> input |  <io3> output | <stmts> stmts"]
+  node1 [label = "<a> func_def | <n> func_name | <cond> condition | <stmts>
+  stmts |<io1> input | <io2> input |  <io3> input | <io4> output "]
   node2 [label = "<a> ref   | <l> func_xor"];
   node3 [label = "<a> ref   | <l> $a"];
   node4 [label = "<a> ref   | <l> $b"];
+  nodex [label = "<a> ref   | <l> $valid"];
   node5 [label = "<a> ref   | <l> %out"];
   node6 [label = "<a> stmts | <s1> statement | <s2> statement"];
 
@@ -33,7 +35,8 @@ digraph assign {
   node1:cond  -> nodee:a;
   node1:io1 -> node3:a;
   node1:io2 -> node4:a;
-  node1:io3 -> node5:a;
+  node1:io3 -> nodex:a;
+  node1:io4 -> node5:a;
 
   node6:s1 -> node7:a;
   node6:s2 -> nodeb:a;

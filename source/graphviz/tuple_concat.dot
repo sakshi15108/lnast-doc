@@ -33,7 +33,7 @@ digraph assign {
   node_h [label = "<a> ref   | <l> ___a"];
 
 
-  node_j [label = "<a> tup     | <n> tup_name | <kv1> key-value | <kv2> key-value"]
+  node_j [label = "<a> tuple     | <n> tuple_name | <kv1> key-value | <kv2> key-value"]
   node_j_1 [label = "<a> ref   | <l> ___f"];
 
   node_k [label = "<a> assign  | <l> lhs  | <r> rhs"];

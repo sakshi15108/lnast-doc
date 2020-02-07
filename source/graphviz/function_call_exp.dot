@@ -9,7 +9,7 @@ digraph assign {
   
 
   node0 [label = "<a> stmts | <s1> statement | <s2> statement | <s3> statement |  <s4> statement" ];
-  node1 [label = "<a> func_def | <n> func_name | <cond> condition | <stmts> stmts |<io1> input | <io2> input |  <io3> output | <stmts> stmts"]
+  node1 [label = "<a> func_def | <n> func_name | <cond> condition | <stmts> stmts |<io1> input | <io2> input |  <io3> output "]
   node2 [label = "<a> ref   | <l> func_xor"];
   node3 [label = "<a> ref   | <l> $a"];
   node4 [label = "<a> ref   | <l> $b"];
@@ -27,11 +27,18 @@ digraph assign {
 
   nodee [label = "<a> condition | <l> true"];
 
-  nodef [label = "<a> func_call | <l> lhs | <n> func_name | <i1> input | <i2>  input"];
+  nodef [label = "<a> func_call | <l> lhs | <n> func_name | <kv1> key-value | <kv2>  key-value"];
   nodeg [label = "<a> ref | <l> my_xor"];
   nodeh [label = "<a> ref | <l> func_xor"];
-  nodei [label = "<a> ref | <l> $foo"];
-  nodej [label = "<a> ref | <l> $bar"];
+
+  nodei[label = "<a> assign | <l> lhs | <r> rhs"]
+  nodex1[label = "<a> ref | <l> a"];
+  nodex2[label = "<a> ref | <l> $foo"];
+  
+  nodej[label = "<a> assign | <l> lhs | <r> rhs"]
+  nodex3[label = "<a> ref | <l> b"];
+  nodex4[label = "<a> ref | <l> $bar"];
+
 
   nodek [label = "<a> dot | <l> lhs | <r1> op1 | <r2> op2 "];
   nodel [label = "<a> ref   | <l> ___d"];
@@ -68,8 +75,8 @@ digraph assign {
 
   nodef:l -> nodeg:a;
   nodef:n -> nodeh:a;
-  nodef:i1 -> nodei:a;
-  nodef:i2 -> nodej:a;
+  nodef:kv1 -> nodei:a;
+  nodef:kv2 -> nodej:a;
 
   nodek:l  -> nodel:a;
   nodek:r1 -> nodem:a;
@@ -77,4 +84,9 @@ digraph assign {
 
   nodeo:l -> nodep:a;
   nodeo:r -> nodeq:a;
+
+  nodei:l -> nodex1:a;
+  nodei:r -> nodex2:a;
+  nodej:l -> nodex3:a;
+  nodej:r -> nodex4:a;
 }
