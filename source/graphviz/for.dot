@@ -6,18 +6,18 @@ digraph assign {
   edge  [fontname = "helvetica", color="#142b30", arrowhead="normal", penwidth = 2];
   graph [fontname = "helvetica"];
 
-  node0 [label = "<a> stmts | <s1> statement | <s2> statement | <s3> statement"];
-  node1 [label = "<a> range | <l>  lhs | <r1> range_start | <r2> range_end"];
-  node2 [label = "<a> ref   | <l> ___c"];
-  node3 [label = "<a> const | <l> 0d0"];
-  node4 [label = "<a> const | <l> 0d3"];
+  node0 [label = "<a> stmts | <s1> statement | <s2> statement"];
 
-  node5 [label = "<a> tup | <n> tup_name | <kv1> key-value"];
-  node6 [label = "<a> ref | <l> ___b"];
+  node1 [label = "<a> tup | <n> tup_name | <kv1> key-value | <kv2> key-value"];
+  node2 [label = "<a> ref | <l> ___b"];
 
-  node7 [label = "<a> assign | <l> lhs  | <r> rhs"];
-  node8 [label = "<a> ref   | <l> null"];
-  node9 [label = "<a> ref   | <l> ___c"];
+  node3 [label = "<a> assign | <l> lhs  | <r> rhs"];
+  node4 [label = "<a> ref    | <l> ___range_begin"];
+  node5 [label = "<a> const  | <l> 0d0"];
+
+  node6 [label = "<a> assign | <l> lhs  | <r> rhs"];
+  node7 [label = "<a> ref    | <l> ___range_end"];
+  node8 [label = "<a> const  | <l> 0d3"];
 
   nodea [label = "<a> for | <stmts0> stmts | <itr> iterator | <itrr> iterator_range"];
   nodeb [label = "<a> stmts | <s1> statement | <s2> statement | <s3> statement | <s4> statement"];
@@ -30,18 +30,17 @@ digraph assign {
   nodeh [label = "<a> ref | <l> i"];
 
   node0:s1 -> node1:a;
-  node0:s2 -> node5:a;
-  node0:s3 -> nodea:a;
+  node0:s2 -> nodea:a;
 
-  node1:l  -> node2:a;
-  node1:r1 -> node3:a;
-  node1:r2 -> node4:a;
-  
-  node5:n  -> node6:a;
-  node5:kv1 -> node7:a;
+  node1:n  -> node2:a;
+  node1:kv1 -> node3:a;
+  node1:kv2 -> node6:a;
 
-  node7:l -> node8:a;
-  node7:r -> node9:a;
+  node3:l -> node4:a;
+  node3:r -> node5:a;
+
+  node6:l -> node7:a;
+  node6:r -> node8:a;
 
   nodea:stmts0 -> nodeb:a;
 
