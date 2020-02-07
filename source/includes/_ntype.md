@@ -456,18 +456,19 @@ auto idx_lhs     = lnast->add_child(idx_plus,   LNast_node::create_ref     (toke
 auto idx_op1     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_3)); //string_view = "cat"
 auto idx_op2     = lnast->add_child(idx_plus,   LNast_node::create_const   (token_4)); //string_view = "0d2"
 
-auto idx_tup     = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_5)); //string_view = "___a"
-auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_6));
-auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_7)); //string_view = "foo"
-auto idx_op3     = lnast->add_child(idx_assign, LNast_node::create_const   (token_8)); //string_view = "0d1"
+auto idx_tup     = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_5)); 
+auto idx_tname   = lnast->add_child(idx_tup,    Lnast_node::create_ref     (token_6)); //string_view = "___a"
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_7));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_8)); //string_view = "foo"
+auto idx_op3     = lnast->add_child(idx_assign, LNast_node::create_const   (token_9)); //string_view = "0d1"
 
-auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_9));
-auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_a)); //string_view = "bar"
-auto idx_op4     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_b)); //string_view = "___d"
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_a));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_b)); //string_view = "bar"
+auto idx_op4     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_c)); //string_view = "___d"
 
-auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_f));
-auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_g)); //string_view = "tup"
-auto idx_op6     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_h)); //string_view = "___a"
+auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_d));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_e)); //string_view = "tup"
+auto idx_op6     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_f)); //string_view = "___a"
 ```
 
 ![assign](source/graphviz/tuple.png)
@@ -508,27 +509,29 @@ auto idx_lhs     = lnast->add_child(idx_plus,   LNast_node::create_ref     (toke
 auto idx_op1     = lnast->add_child(idx_plus,   LNast_node::create_ref     (token_3)); //string_view = "cat"
 auto idx_op2     = lnast->add_child(idx_plus,   LNast_node::create_const   (token_4)); //string_view = "0d2"
 
-auto idx_tup     = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_5)); //string_view = "___a"
-auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_6));
-auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_7)); //string_view = "foo"
-auto idx_op3     = lnast->add_child(idx_assign, LNast_node::create_const   (token_8)); //string_view = "0d1"
+auto idx_tup     = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_5)); 
+auto idx_tname   = lnast->add_child(idx_tup,    Lnast_node::create_ref     (token_6)); //string_view = "___a"
 
-auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_9));
-auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_a)); //string_view = "bar"
-auto idx_op4     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_b)); //string_view = "___d"
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_7));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_8)); //string_view = "foo"
+auto idx_op3     = lnast->add_child(idx_assign, LNast_node::create_const   (token_9)); //string_view = "0d1"
 
-auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_f));
-auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_g)); //string_view = "tup"
-auto idx_op6     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_h)); //string_view = "___a"
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_a));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_b)); //string_view = "bar"
+auto idx_op4     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_c)); //string_view = "___d"
 
-auto idx_tup2    = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_i)); //string_view = "___f"
-auto idx_assign  = lnast->add_child(idx_tup2,   Lnast_node::create_assign  (token_j));
-auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_k)); //string_view = "null"
-auto idx_op7     = lnast->add_child(idx_assign, LNast_node::create_const   (token_l)); //string_view = "0d4"
+auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_d));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_e)); //string_view = "tup"
+auto idx_op6     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_f)); //string_view = "___a"
 
-auto idx_assign  = lnast->add_child(idx_tup2,   Lnast_node::create_assign  (token_m));
-auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_n)); //string_view = "null"
-auto idx_op8     = lnast->add_child(idx_assign, LNast_node::create_reg     (token_o)); //string_view = "dog"
+auto idx_tup2    = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_g)); //string_view = "___f"
+auto idx_assign  = lnast->add_child(idx_tup2,   Lnast_node::create_assign  (token_h));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_i)); //string_view = "null"
+auto idx_op7     = lnast->add_child(idx_assign, LNast_node::create_const   (token_j)); //string_view = "0d4"
+
+auto idx_assign  = lnast->add_child(idx_tup2,   Lnast_node::create_assign  (token_k));
+auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_l)); //string_view = "null"
+auto idx_op8     = lnast->add_child(idx_assign, LNast_node::create_reg     (token_m)); //string_view = "dog"
 
 
 auto idx_tconcat = lnast->add_child(idx_stmts0,  Lnast_node::create_tuple_concat (token_p)); 
@@ -573,40 +576,41 @@ for i in (0..3) {
 
 ```cpp
 //C++ 
-
 auto idx_range   = lnast->add_child(idx_stmts0, Lnast_node::create_range   (token_1));
 auto idx_lhs     = lnast->add_child(idx_range,  Lnast_node::create_ref     (token_2)); //string_view = "___c"
 auto idx_op1     = lnast->add_child(idx_range , Lnast_node::create_const   (token_3)); //string_view = "0d0"
 auto idx_op2     = lnast->add_child(idx_range , Lnast_node::create_const   (token_4)); //string_view = "0d3"
 
-auto idx_tup     = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_5)); //string_view = "___b"
-auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_6));
-auto idx_lhs     = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_7)); //string_view = "null"
-auto idx_op3     = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_8)); //string_view = "___c"
+auto idx_tup     = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_5)); 
+auto idx_tname   = lnast->add_child(idx_tup,    Lnast_node::create_ref     (token_6)); //string_view = "___b"
 
-auto idx_for       = lnast->add_child(idx_stmts0, Lnast_node::create_for   (token_9));
-auto idx_stmts1    = lnast->add_child(idx_for,    Lnast_node::create_stmts (token_a)); 
-auto idx_itr       = lnast->add_child(idx_for,    Lnast_node::create_ref   (token_b)); //string_view = "i"
-auto idx_itr_range = lnast->add_child(idx_for,    Lnast_node::create_ref   (token_c)); //string_view = "___b"
+auto idx_assign  = lnast->add_child(idx_tup,    Lnast_node::create_assign  (token_7));
+auto idx_lhs     = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_8)); //string_view = "null"
+auto idx_op3     = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_9)); //string_view = "___c"
 
-auto idx_select  = lnast->add_child(idx_stmts1, Lnast_node::create_select  (token_d));  
-auto idx_lhs     = lnast->add_child(idx_select, Lnast_node::create_ref     (token_e)); //string_view = "___d"
-auto idx_op4     = lnast->add_child(idx_select, Lnast_node::create_ref     (token_f)); //string_view = "tup_foo"
-auto idx_op5     = lnast->add_child(idx_select, Lnast_node::create_ref     (token_g)); //string_view = "i"
+auto idx_for       = lnast->add_child(idx_stmts0, Lnast_node::create_for   (token_a));
+auto idx_stmts1    = lnast->add_child(idx_for,    Lnast_node::create_stmts (token_b)); 
+auto idx_itr       = lnast->add_child(idx_for,    Lnast_node::create_ref   (token_c)); //string_view = "i"
+auto idx_itr_range = lnast->add_child(idx_for,    Lnast_node::create_ref   (token_d)); //string_view = "___b"
 
-auto idx_minus   = lnast->add_child(idx_stmts1, Lnast_node::create_minus   (token_h));  
-auto idx_lhs     = lnast->add_child(idx_minus,  Lnast_node::create_ref     (token_i)); //string_view = "___g"
-auto idx_op6     = lnast->add_child(idx_minus,  Lnast_node::create_cond    (token_j)); //string_view = "0d3"
-auto idx_op7     = lnast->add_child(idx_minus,  Lnast_node::create_ref     (token_k)); //string_view = "i"
+auto idx_select  = lnast->add_child(idx_stmts1, Lnast_node::create_select  (token_e));  
+auto idx_lhs     = lnast->add_child(idx_select, Lnast_node::create_ref     (token_f)); //string_view = "___d"
+auto idx_op4     = lnast->add_child(idx_select, Lnast_node::create_ref     (token_g)); //string_view = "tup_foo"
+auto idx_op5     = lnast->add_child(idx_select, Lnast_node::create_ref     (token_h)); //string_view = "i"
 
-auto idx_select  = lnast->add_child(idx_stmts1, Lnast_node::create_select  (token_l));  
-auto idx_lhs     = lnast->add_child(idx_select, Lnast_node::create_ref     (token_m)); //string_view = "___f"
-auto idx_op8     = lnast->add_child(idx_select, Lnast_node::create_ref     (token_n)); //string_view = "tup_bar"
-auto idx_op9     = lnast->add_child(idx_select, Lnast_node::create_ref     (token_o)); //string_view = "___g"
+auto idx_minus   = lnast->add_child(idx_stmts1, Lnast_node::create_minus   (token_i));  
+auto idx_lhs     = lnast->add_child(idx_minus,  Lnast_node::create_ref     (token_j)); //string_view = "___g"
+auto idx_op6     = lnast->add_child(idx_minus,  Lnast_node::create_cond    (token_k)); //string_view = "0d3"
+auto idx_op7     = lnast->add_child(idx_minus,  Lnast_node::create_ref     (token_l)); //string_view = "i"
 
-auto idx_assign  = lnast->add_child(idx_stmts1, Lnast_node::create_assign  (token_p));
-auto idx_lhs     = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_q)); //string_view = "___d"
-auto idx_opa     = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_r)); //string_view = "___f"
+auto idx_select  = lnast->add_child(idx_stmts1, Lnast_node::create_select  (token_m));  
+auto idx_lhs     = lnast->add_child(idx_select, Lnast_node::create_ref     (token_n)); //string_view = "___f"
+auto idx_op8     = lnast->add_child(idx_select, Lnast_node::create_ref     (token_o)); //string_view = "tup_bar"
+auto idx_op9     = lnast->add_child(idx_select, Lnast_node::create_ref     (token_p)); //string_view = "___g"
+
+auto idx_assign  = lnast->add_child(idx_stmts1, Lnast_node::create_assign  (token_q));
+auto idx_lhs     = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_r)); //string_view = "___d"
+auto idx_opa     = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_s)); //string_view = "___f"
 
 ```
 ![assign](source/graphviz/for.png)
@@ -952,3 +956,87 @@ TODO
 
 ```
 ![assign](source/graphviz/function_call_exp.png)
+
+
+
+
+
+```coffescript
+// Pyrope
+val = 1023u10bits
+```
+
+# Attrubite statement
+There are two ways to set an attrubite to a variable or tuple, 
+using "." dot operator directly or using as (\_\_attr = foo).
+An classical attrubite setting is bitwidth assignment.
+
+
+```coffescript
+// Pyrope
+foo.__bits = 3
+foo = 7
+
+bar as (__bits = 10)
+bar = 123
+
+```
+
+```verilog
+// Verilog
+wire [2:0] foo;
+wire [9:0] bar;
+
+assign foo = 7;
+assign bar = 123;
+
+```
+
+```shell
+// CFG
+1       0       0       SEQ0
+2       1       0       0       14      .       ___a    foo     __bits
+3       1       1       0       14      =       ___a    0d3
+4       1       2       15      22      =       foo     0d7
+5       1       0       TUP0    ___b
+6       5       3       24      44      =       __bits  0d10
+7       1       4       24      44      as      bar     ___b
+8       1       5       45      54      =       bar     0d123
+```
+
+```cpp
+// C++
+
+auto idx_dot    = lnast->add_child(idx_stmts, Lnast_node::create_dot    (token1));
+auto idx_lhs1   = lnast->add_child(idx_dot,   Lnast_node::create_ref    (token2)); // string_view = ___a
+auto idx_op1    = lnast->add_child(idx_dot,   Lnast_node::create_ref    (token3)); // string_view = foo       
+auto idx_op2    = lnast->add_child(idx_dot,   Lnast_node::create_ref    (token4)); // string_view = __bits       
+
+auto idx_assign = lnast->add_child(idx_stmts,  Lnast_node::create_assign(token5));
+auto idx_lhs2   = lnast->add_child(idx_assign, Lnast_node::create_ref   (token6)); // string_view = ___a
+auto idx_op3    = lnast->add_child(idx_assign, Lnast_node::create_const (token7)); // string_view = 0d3       
+
+
+auto idx_assign = lnast->add_child(idx_stmts,  Lnast_node::create_assign(token8));
+auto idx_lhs2   = lnast->add_child(idx_assign, Lnast_node::create_ref   (token9)); // string_view = foo
+auto idx_op3    = lnast->add_child(idx_assign, Lnast_node::create_const (tokena)); // string_view = 0d7       
+
+auto idx_tup    = lnast->add_child(idx_stmts,  Lnast_node::create_tuple (tokenb));
+auto idx_tname  = lnast->add_child(idx_tup,    Lnast_node::create_ref   (tokenc)); // string_view = ___b
+
+auto idx_assign = lnast->add_child(idx_tup,    Lnast_node::create_assign(tokend));
+auto idx_lhs    = lnast->add_child(idx_assign, LNast_node::create_ref   (tokene)); //string_view = "__bits"
+auto idx_op4    = lnast->add_child(idx_assign, LNast_node::create_const (tokenf)); //string_view = "0d10"
+
+
+auto idx_as     = lnast->add_child(idx_stmts,  Lnast_node::create_as    (tokeng));
+auto idx_lhs    = lnast->add_child(idx_assign, LNast_node::create_ref   (tokenh)); //string_view = "bar"
+auto idx_op5    = lnast->add_child(idx_assign, LNast_node::create_ref   (tokeni)); //string_view = "___b"
+
+auto idx_assign = lnast->add_child(idx_stmts,  Lnast_node::create_assign(tokenj));
+auto idx_lhs    = lnast->add_child(idx_assign, LNast_node::create_ref   (tokenk)); //string_view = "bar"
+auto idx_op6    = lnast->add_child(idx_assign, LNast_node::create_const (tokenk)); //string_view = "0d123"
+
+```
+![assign](source/graphviz/attribute.png)
+
