@@ -300,7 +300,7 @@ if a > 3 {
 ```
 
 ```verilog
-assign b = (a > 3) ? a - 1 : b; //FIXME: SH: incomplete cases? combinational loop!?
+assign b2 = (a > 3) ? a - 1 : b; 
 ```
 
 
@@ -525,7 +525,8 @@ auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (toke
 auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_e)); //string_view = "tup"
 auto idx_op6     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_f)); //string_view = "___a"
 
-auto idx_tup2    = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_g)); //string_view = "___f"
+auto idx_tup2    = lnast->add_child(idx_stmts0, Lnast_node::create_tuple   (token_g))
+auto idx_tname   = lnast->add_child(idx_tup2,   Lnast_node::create_ref     (token_h)); //string_view = "___f"
 auto idx_assign  = lnast->add_child(idx_tup2,   Lnast_node::create_assign  (token_h));
 auto idx_lhs     = lnast->add_child(idx_assign, LNast_node::create_ref     (token_i)); //string_view = "null"
 auto idx_op7     = lnast->add_child(idx_assign, LNast_node::create_const   (token_j)); //string_view = "0d4"
@@ -831,15 +832,18 @@ endmodule
 
 ```shell
 // CFG 
-1  0  0  SEQ0                                    
-2  1  0  0     47  ::{  ___a null $a  $b  %out
-4  2  0  SEQ1                                    
-5  4  0  0     47  ^    ___b      $a       $b      
-6  4  1  0     47  =    %out      ___b           
-7  1  1  0     47  =    func_xor  \___a          
-8  1  2  61    90  .()  my_xor    func_xor $foo    $bar
-9  1  4  91    112  .   ___d      my_xor   out
-10 1  6  91    112  =   %out_top  ___d
+1   0  0  SEQ0                                            
+2   1  0  0     47    ::{   ___a      null      $a    $b  %out
+4   2  0  SEQ1                                            
+5   4  0  0     47    ^     ___b      $a        $b        
+6   4  1  0     47    =     %out      ___b                
+7   1  1  0     47    =     func_xor  \___a               
+8   1  0  TUP0  ___d                                      
+9   8  2  49    =     null  $foo                          
+10  8  3  49    =     null  $bar                          
+11  1  4  49    78    .()   my_xor    func_xor  ___d      
+13  1  6  79    96    .     ___f      my_xor    out       
+15  1  8  79    96    =     %out      ___f                
 ```
 
 ```cpp
@@ -848,48 +852,54 @@ auto idx_stmts0 = lnast->add_child(idx_root,   Lnast_node::create_stmts   (token
 auto idx_func   = lnast->add_child(idx_stmts0, Lnast_node::create_func_def(token_1));
 
 auto idx_fname  = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_2)); //string_view = "func_xor"
-
 auto idx_cond   = lnast->add_child(idx_func,   Lnast_node::create_cond    (token_3)); //string_view = "true"
 auto idx_stmts1 = lnast->add_child(idx_func,   Lnast_node::create_stmts   (token_4));
 auto idx_io1    = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_5)); //string_view = "$a"
 auto idx_io2    = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_6)); //string_view = "$b"
 auto idx_io3    = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_7)); //string_view = "$out"
 
-auto idx_xor    = lnast->add_child(idx_stmts1, Lnast_node::create_xor     (token_7)); 
-auto idx_lhs    = lnast->add_child(idx_xor,    Lnast_node::create_ref     (token_8)); //string_view = "___b"
-auto idx_op1    = lnast->add_child(idx_xor,    Lnast_node::create_ref     (token_9)); //string_view = "$a"
-auto idx_op2    = lnast->add_child(idx_xor,    Lnast_node::create_ref     (token_a)); //string_view = "$b"
+auto idx_xor    = lnast->add_child(idx_stmts1, Lnast_node::create_xor     (token_8)); 
+auto idx_lhs    = lnast->add_child(idx_xor,    Lnast_node::create_ref     (token_9)); //string_view = "___b"
+auto idx_op1    = lnast->add_child(idx_xor,    Lnast_node::create_ref     (token_a)); //string_view = "$a"
+auto idx_op2    = lnast->add_child(idx_xor,    Lnast_node::create_ref     (token_b)); //string_view = "$b"
 
-auto idx_assign = lnast->add_child(idx_stmts1, Lnast_node::create_assign  (token_b));
-auto idx_lhs    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_c)); //string_view = "%out"
-auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_d)); //string_view = "___b"
+auto idx_assign = lnast->add_child(idx_stmts1, Lnast_node::create_assign  (token_c));
+auto idx_lhs    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_d)); //string_view = "%out"
+auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_e)); //string_view = "___b"
 
-auto idx_fcall  = lnast->add_child(idx_stmts0, Lnast_node::create_func_call(token_e));
-auto idx_lhs    = lnast->add_child(idx_fcall,  Lnast_node::create_ref     (token_f)); //string_view = "my_xor"
-auto idx_target = lnast->add_child(idx_fcall,  Lnast_node::create_ref     (token_g)); //string_view = "func_xor"
-auto idx_assign = lnast->add_child(idx_fcall,  Lnast_node::create_ref     (token_h)); 
-aito idx_lhs    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_i)); //string_view = "null"
-auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_d)); //string_view = "$foo"
+auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_f));
+auto idx_lhs     = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_g)); //string_view = "func_xor"
+auto idx_op1     = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_h)); //string_view = "\___a"
 
-auto idx_assign = lnast->add_child(idx_fcall,  Lnast_node::create_ref     (token_h)); 
-aito idx_lhs    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_i)); //string_view = "null"
-auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_d)); //string_view = "$bar"
+auto idx_tup    = lnast->add_child(idx_stmts0, Lnast_node::create_tuple    (token_i)); 
+auto idx_tname  = lnast->add_child(idx_tup,    Lnast_node::create_ref      (token_j)); //string_view = "___d"
+auto idx_assign = lnast->add_child(idx_tup,    Lnast_node::create_assign   (token_k));
+auto idx_lhs    = lnast->add_child(idx_assign, LNast_node::create_ref      (token_l)); //string_view = "null"
+auto idx_op3    = lnast->add_child(idx_assign, LNast_node::create_ref      (token_m)); //string_view = "$foo"
 
+auto idx_assign = lnast->add_child(idx_tup,    Lnast_node::create_assign   (token_n));
+auto idx_lhs    = lnast->add_child(idx_assign, LNast_node::create_ref      (token_o)); //string_view = "null"
+auto idx_op3    = lnast->add_child(idx_assign, LNast_node::create_ref      (token_p)); //string_view = "$bar"
 
-auto idx_dot    = lnast->add_child(idx_stmts0, Lnast_node::create_dot     (token_j)); 
-auto idx_lhs    = lnast->add_child(idx_dot   , Lnast_node::create_ref     (token_k)); //string_view = "___d"
-auto idx_op1    = lnast->add_child(idx_dot   , Lnast_node::create_ref     (token_l)); //string_view = "my_xor"
-auto idx_op2    = lnast->add_child(idx_dot   , Lnast_node::create_ref     (token_m)); //string_view = "out"
+auto idx_fcall  = lnast->add_child(idx_stmts0, Lnast_node::create_func_call(token_q));
+auto idx_lhs    = lnast->add_child(idx_fcall,  Lnast_node::create_ref      (token_r)); //string_view = "my_xor"
+auto idx_target = lnast->add_child(idx_fcall,  Lnast_node::create_ref      (token_s)); //string_view = "func_xor"
+auto idx_arg    = lnast->add_child(idx_fcall,  Lnast_node::create_ref      (token_t)); //string_view = "___d"
 
-auto idx_assign = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_n));
-auto idx_lhs    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_o)); //string_view = "%out_top"
-auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_p)); //string_view = "___d"
+auto idx_dot    = lnast->add_child(idx_stmts0, Lnast_node::create_dot      (token_u)); 
+auto idx_lhs    = lnast->add_child(idx_dot   , Lnast_node::create_ref      (token_v)); //string_view = "___f"
+auto idx_op1    = lnast->add_child(idx_dot   , Lnast_node::create_ref      (token_w)); //string_view = "my_xor"
+auto idx_op2    = lnast->add_child(idx_dot   , Lnast_node::create_ref      (token_x)); //string_view = "out"
+
+auto idx_assign = lnast->add_child(idx_stmts0, Lnast_node::create_assign   (token_y));
+auto idx_lhs    = lnast->add_child(idx_assign, Lnast_node::create_ref      (token_z)); //string_view = "%out"
+auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref      (token_aa));//string_view = "___f"
 
 ```
 
 ![assign](source/graphviz/function_call_imp.png)
 
-##!!!Explicit Function Argument Assignment
+##Explicit Function Argument Assignment
 ```coffescript
 // Pyrope
 func_xor = :($a, $b, %out):{
@@ -921,41 +931,73 @@ module top(
   func_xor my_xor(.a(foo), .b(bar), .out(out))
 
 endmodule
-
-
 ```
 
 ```shell
 // CFG 
-
-1       0       0       SEQ0
-2       1       0       0       47      ::{     ___a    null    $a      $b   %out
-4       2       0       SEQ1
-5       4       0       0       47      ^       ___b    $a      $b
-6       4       1       0       47      =       %out    ___b
-7       1       1       0       47      =       func_xor        \___a
-8       1       2       49      86      .()     ___e    $foo
-9       1       3       49      86      =       a       ___e
-10      1       4       49      86      .()     ___g    $bar
-11      1       5       49      86      =       b       ___g
-12      1       6       49      86      .()     ___c    func_xor        a    b
-13      1       7       49      86      =       my_xor  ___c
-14      1       8       87      104     .       ___i    my_xor  out
-15      1       9       87      104     .()     ___h    ___i
-16      1       10      87      104     =       %out    ___h
-
-
-//FIXME: there will be a variable reassignment of variable a in top scope, the 
-my_xor = func_xor(a = $foo, b = $bar)
-should be expressed as a tuple sequence!?
-
+1   0  0   SEQ0                                           
+2   1  0   0     47    ::{  ___a      null      $a    $b  %out
+4   2  0   SEQ1                                           
+5   4  0   0     47    ^    ___b      $a        $b        
+6   4  1   0     47    =    %out      ___b                
+7   1  1   0     47    =    func_xor  \___a               
+8   1  0   TUP0  ___d                                     
+10  8  3   49    86    =    a         $foo                
+12  8  5   49    86    =    b         $bar                
+13  1  6   49    86    .()  ___c      func_xor  ___d      
+14  1  7   49    86    =    my_xor    ___c                
+15  1  8   87    104   .    ___j      my_xor    out       
+17  1  10  87    104   =    %out      ___j                
 ```
 
 ```cpp
 //C++ 
-TODO
+auto idx_stmts0 = lnast->add_child(idx_root,   Lnast_node::create_stmts   (token_0));
+auto idx_func   = lnast->add_child(idx_stmts0, Lnast_node::create_func_def(token_1));
 
+auto idx_fname  = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_2)); //string_view = "func_xor"
+auto idx_cond   = lnast->add_child(idx_func,   Lnast_node::create_cond    (token_3)); //string_view = "true"
+auto idx_stmts1 = lnast->add_child(idx_func,   Lnast_node::create_stmts   (token_4));
+auto idx_io1    = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_5)); //string_view = "$a"
+auto idx_io2    = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_6)); //string_view = "$b"
+auto idx_io3    = lnast->add_child(idx_func,   Lnast_node::create_ref     (token_7)); //string_view = "$out"
 
+auto idx_xor    = lnast->add_child(idx_stmts1, Lnast_node::create_xor     (token_8)); 
+auto idx_lhs    = lnast->add_child(idx_xor,    Lnast_node::create_ref     (token_9)); //string_view = "___b"
+auto idx_op1    = lnast->add_child(idx_xor,    Lnast_node::create_ref     (token_a)); //string_view = "$a"
+auto idx_op2    = lnast->add_child(idx_xor,    Lnast_node::create_ref     (token_b)); //string_view = "$b"
+
+auto idx_assign = lnast->add_child(idx_stmts1, Lnast_node::create_assign  (token_c));
+auto idx_lhs    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_d)); //string_view = "%out"
+auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_e)); //string_view = "___b"
+
+auto idx_assign  = lnast->add_child(idx_stmts0, Lnast_node::create_assign  (token_f));
+auto idx_lhs     = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_g)); //string_view = "func_xor"
+auto idx_op1     = lnast->add_child(idx_assign, Lnast_node::create_ref     (token_h)); //string_view = "\___a"
+
+auto idx_tup    = lnast->add_child(idx_stmts0, Lnast_node::create_tuple    (token_i)); 
+auto idx_tname  = lnast->add_child(idx_tup,    Lnast_node::create_ref      (token_j)); //string_view = "___d"
+auto idx_assign = lnast->add_child(idx_tup,    Lnast_node::create_assign   (token_k));
+auto idx_lhs    = lnast->add_child(idx_assign, LNast_node::create_ref      (token_l)); //string_view = "a"
+auto idx_op3    = lnast->add_child(idx_assign, LNast_node::create_ref      (token_m)); //string_view = "$foo"
+
+auto idx_assign = lnast->add_child(idx_tup,    Lnast_node::create_assign   (token_n));
+auto idx_lhs    = lnast->add_child(idx_assign, LNast_node::create_ref      (token_o)); //string_view = "b"
+auto idx_op3    = lnast->add_child(idx_assign, LNast_node::create_ref      (token_p)); //string_view = "$bar"
+
+auto idx_fcall  = lnast->add_child(idx_stmts0, Lnast_node::create_func_call(token_q));
+auto idx_lhs    = lnast->add_child(idx_fcall,  Lnast_node::create_ref      (token_r)); //string_view = "my_xor"
+auto idx_target = lnast->add_child(idx_fcall,  Lnast_node::create_ref      (token_s)); //string_view = "func_xor"
+auto idx_arg    = lnast->add_child(idx_fcall,  Lnast_node::create_ref      (token_t)); //string_view = "___d"
+
+auto idx_dot    = lnast->add_child(idx_stmts0, Lnast_node::create_dot      (token_u)); 
+auto idx_lhs    = lnast->add_child(idx_dot   , Lnast_node::create_ref      (token_v)); //string_view = "___j"
+auto idx_op1    = lnast->add_child(idx_dot   , Lnast_node::create_ref      (token_w)); //string_view = "my_xor"
+auto idx_op2    = lnast->add_child(idx_dot   , Lnast_node::create_ref      (token_x)); //string_view = "out"
+
+auto idx_assign = lnast->add_child(idx_stmts0, Lnast_node::create_assign   (token_y));
+auto idx_lhs    = lnast->add_child(idx_assign, Lnast_node::create_ref      (token_z)); //string_view = "%out"
+auto idx_op1    = lnast->add_child(idx_assign, Lnast_node::create_ref      (token_aa));//string_view = "___j"
 ```
 ![assign](source/graphviz/function_call_exp.png)
 

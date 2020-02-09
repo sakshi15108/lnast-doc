@@ -8,85 +8,102 @@ digraph assign {
 
   
 
-  node0 [label = "<a> stmts | <s1> statement | <s2> statement | <s3> statement |  <s4> statement" ];
+  node0 [label = "<a> stmts | <s1> statement | <s2> statement | <s3> statement |  <s4> statement | <s5> statement | <s6> statement" ];
   node1 [label = "<a> func_def | <n> func_name | <cond> condition | <stmts> stmts |<io1> input | <io2> input |  <io3> output "]
   node2 [label = "<a> ref   | <l> func_xor"];
-  node3 [label = "<a> ref   | <l> $a"];
-  node4 [label = "<a> ref   | <l> $b"];
-  node5 [label = "<a> ref   | <l> %out"];
-  node6 [label = "<a> stmts | <s1> statement | <s2> statement"];
+  node3 [label = "<a> condition | <l> true"];
+  node4 [label = "<a> stmts | <s1> statement | <s2> statement"];
+  node5 [label = "<a> ref   | <l> $a"];
+  node6 [label = "<a> ref   | <l> $b"];
+  node7 [label = "<a> ref   | <l> %out"];
 
-  node7 [label = "<a> xor | <l> lhs | <r1> op1 | <r2> op2 "];
-  node8 [label = "<a> ref   | <l> ___b"];
-  node9 [label = "<a> ref   | <l> $a"];
-  nodea [label = "<a> ref   | <l> $b"];
+  node8 [label = "<a> xor | <l> lhs | <r1> op1 | <r2> op2 "];
+  node9 [label = "<a> ref   | <l> ___b"];
+  nodea [label = "<a> ref   | <l> $a"];
+  nodeb [label = "<a> ref   | <l> $b"];
 
-  nodeb [label = "<a> assign | <l> lhs  | <r> rhs"];
-  nodec [label = "<a> ref   | <l> %out"];
-  noded [label = "<a> ref   | <l> ___b"];
+  nodec [label = "<a> assign | <l> lhs  | <r> rhs"];
+  noded [label = "<a> ref   | <l> %out"];
+  nodee [label = "<a> ref   | <l> ___b"];
 
-  nodee [label = "<a> condition | <l> true"];
+  nodef [label = "<a> assign | <l> lhs  | <r> rhs"];
+  nodeg [label = "<a> ref   | <l> func_xor"];
+  nodeh [label = "<a> ref   | <l> \___a"];
 
-  nodef [label = "<a> func_call | <l> lhs | <n> func_name | <kv1> key-value | <kv2>  key-value"];
-  nodeg [label = "<a> ref | <l> my_xor"];
-  nodeh [label = "<a> ref | <l> func_xor"];
-
-  nodei[label = "<a> assign | <l> lhs | <r> rhs"]
-  nodex1[label = "<a> ref | <l> a"];
-  nodex2[label = "<a> ref | <l> $foo"];
   
-  nodej[label = "<a> assign | <l> lhs | <r> rhs"]
-  nodex3[label = "<a> ref | <l> b"];
-  nodex4[label = "<a> ref | <l> $bar"];
+  nodei [label = "<a> tuple   | <n> tuple_name | <kv1> key-value | <kv2> key-value"]
+  nodej [label = "<a> ref   | <l> ___d"];
+
+  nodek [label = "<a> assign | <l> lhs  | <r> rhs"];
+  nodel [label = "<a> ref    | <l> a"];
+  nodem [label = "<a> ref    | <l> $foo"];
+
+  noden [label = "<a> assign | <l> lhs  | <r> rhs"];
+  nodeo [label = "<a> ref    | <l> b"];
+  nodep [label = "<a> ref    | <l> $bar"];
+
+  nodeq [label = "<a> func_call | <l> lhs | <n> func_name | <tp> arguments"];
+  noder [label = "<a> ref | <l> my_xor"];
+  nodes [label = "<a> ref | <l> func_xor"];
+  nodet [label = "<a> ref | <l> ___d"];
 
 
-  nodek [label = "<a> dot | <l> lhs | <r1> op1 | <r2> op2 "];
-  nodel [label = "<a> ref   | <l> ___d"];
-  nodem [label = "<a> ref   | <l> my_xor"];
-  noden [label = "<a> ref   | <l> out"];
+  nodeu [label = "<a> dot | <l> lhs | <r1> op1 | <r2> op2 "];
+  nodev [label = "<a> ref   | <l> ___f"];
+  nodew [label = "<a> ref   | <l> my_xor"];
+  nodex [label = "<a> ref   | <l> out"];
 
-  nodeo [label = "<a> assign | <l> lhs  | <r> rhs"];
-  nodep [label = "<a> ref   | <l> %out_top"];
-  nodeq [label = "<a> ref   | <l> ___d"];
+  nodey  [label = "<a> assign | <l> lhs  | <r> rhs"];
+  nodez  [label = "<a> ref   | <l> %out"];
+  nodeaa [label = "<a> ref   | <l> ___f"];
 
 
 
   node0:s1  -> node1:a;
   node0:s2  -> nodef:a;
-  node0:s3  -> nodek:a;
-  node0:s4  -> nodeo:a;
+  node0:s3  -> nodei:a;
+  node0:s4  -> nodeq:a;
+  node0:s5  -> nodeu:a;
+  node0:s6  -> nodey:a;
 
-  node1:n   -> node2:a;
-  node1:stmts -> node6:a;
-  node1:cond  -> nodee:a;
-  node1:io1 -> node3:a;
-  node1:io2 -> node4:a;
-  node1:io3 -> node5:a;
+  node1:n     -> node2:a;
+  node1:cond  -> node3:a;
+  node1:stmts -> node4:a;
+  node1:io1   -> node5:a;
+  node1:io2   -> node6:a;
+  node1:io3   -> node7:a;
 
-  node6:s1 -> node7:a;
-  node6:s2 -> nodeb:a;
+  node4:s1 -> node8:a;
+  node4:s2 -> nodec:a;
 
-  node7:l -> node8:a;
-  node7:r1 -> node9:a;
-  node7:r2 -> nodea:a;
+  node8:l  -> node9:a;
+  node8:r1 -> nodea:a;
+  node8:r2 -> nodeb:a;
+
+  nodec:l  -> noded:a;
+  nodec:r  -> nodee:a;
+
+  nodef:l  -> nodeg:a;
+  nodef:r  -> nodeh:a;
   
-  nodeb:l -> nodec:a;
-  nodeb:r -> noded:a;
+  nodei:n   -> nodej:a;
+  nodei:kv1 -> nodek:a;
+  nodei:kv2 -> noden:a;
 
-  nodef:l -> nodeg:a;
-  nodef:n -> nodeh:a;
-  nodef:kv1 -> nodei:a;
-  nodef:kv2 -> nodej:a;
+  nodek:l -> nodel:a;
+  nodek:r -> nodem:a;
 
-  nodek:l  -> nodel:a;
-  nodek:r1 -> nodem:a;
-  nodek:r2 -> noden:a;
+  noden:l -> nodeo:a;
+  noden:r -> nodep:a;
 
-  nodeo:l -> nodep:a;
-  nodeo:r -> nodeq:a;
+  nodeq:l -> noder:a;
+  nodeq:n -> nodes:a;
+  nodeq:tp-> nodet:a;
 
-  nodei:l -> nodex1:a;
-  nodei:r -> nodex2:a;
-  nodej:l -> nodex3:a;
-  nodej:r -> nodex4:a;
+  nodeu:l -> nodev:a;
+  nodeu:r1 -> nodew:a;
+  nodeu:r2 -> nodex:a;
+
+  nodey:l -> nodez:a;
+  nodey:r -> nodeaa:a;
 }
