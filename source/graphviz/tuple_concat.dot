@@ -8,7 +8,7 @@ digraph assign {
 
   
 
-  node_0 [label = "<a> stmts | <s1> statement | <s2> statement | <s3> statement 
+  node_0 [label = "<a> stmts | <s1> statement | <s2> statement 
                              | <s4> statement | <s5> statement | <s6> statement"];
 
   node_5 [label = "<a> plus | <l> lhs | <r1> op1 | <r2> op2 "];
@@ -17,7 +17,7 @@ digraph assign {
   node_8 [label = "<a> const   | <l> 0d2"];
 
   node_1 [label = "<a> tup   | <n> tup_name | <kv1> key-value | <kv2> key-value"]
-  node_1_1 [label = "<a> ref   | <l> ___a"];
+  node_1_1 [label = "<a> ref   | <l> tup"];
 
   node_2 [label = "<a> assign | <l> lhs  | <r> rhs"];
   node_3 [label = "<a> ref   | <l> foo"];
@@ -26,11 +26,6 @@ digraph assign {
   node_9 [label = "<a> assign | <l> lhs  | <r> rhs"];
   node_a [label = "<a> ref    | <l> bar"];
   node_b [label = "<a> ref    | <l> ___d"];
-
-
-  node_f [label = "<a> assign | <l> lhs  | <r> rhs"];
-  node_g [label = "<a> ref   | <l> tup"];
-  node_h [label = "<a> ref   | <l> ___a"];
 
 
   node_j [label = "<a> tuple     | <n> tuple_name | <kv1> key-value | <kv2> key-value"]
@@ -55,7 +50,6 @@ digraph assign {
 
   node_0:s1  -> node_5:a
   node_0:s2  -> node_1:a;
-  node_0:s3  -> node_f:a;
   node_0:s4  -> node_j:a;
   node_0:s5  -> node_q:a;
   node_0:s6  -> node_u:a;
@@ -76,8 +70,6 @@ digraph assign {
   node_9:l -> node_a:a;
   node_9:r -> node_b:a;
 
-  node_f:l -> node_g:a;
-  node_f:r -> node_h:a;
 
   node_j:n -> node_j_1:a;
   node_j:kv1 -> node_k:a;
