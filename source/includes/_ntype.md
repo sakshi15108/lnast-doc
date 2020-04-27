@@ -216,9 +216,9 @@ assign out = ~inp;
 
 ```cpp
 //C++
-auto idx_not  = lnast->add_child(idx_not,    Lnast_node::create_assign(token1));
-auto idx_lhs  = lnast->add_child(idx_assign, Lnast_node::create_ref   (token2)); // string_view = %out
-auto idx_op   = lnast->add_child(idx_assign, Lnast_node::create_ref   (token3)); // string_view = $inp       
+auto idx_not  = lnast->add_child(idx_not,    Lnast_node::create_not(token1));
+auto idx_lhs  = lnast->add_child(idx_assign, Lnast_node::create_ref(token2)); // string_view = %out
+auto idx_op   = lnast->add_child(idx_assign, Lnast_node::create_ref(token3)); // string_view = $inp       
 ```
 ![assign](source/graphviz/inv.png)
 
@@ -245,9 +245,9 @@ assign out = !inp;
 
 ```cpp
 //C++
-auto idx_not  = lnast->add_child(idx_logical_not, Lnast_node::create_assign(token1));
-auto idx_lhs  = lnast->add_child(idx_assign     , Lnast_node::create_ref   (token2)); // string_view = %out
-auto idx_op   = lnast->add_child(idx_assign     , Lnast_node::create_ref   (token3)); // string_view = $inp       
+auto idx_not  = lnast->add_child(idx_logical_not, Lnast_node::create_logical_not(token1));
+auto idx_lhs  = lnast->add_child(idx_assign     , Lnast_node::create_ref        (token2)); // string_view = %out
+auto idx_op   = lnast->add_child(idx_assign     , Lnast_node::create_ref        (token3)); // string_view = $inp       
 ```
 ![assign](source/graphviz/logical_inv.png)
 

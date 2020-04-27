@@ -462,9 +462,9 @@ statements that have operations must breakdown the operations per type, and then
 2 1 1 0    10  ~ %out  <span class="hljs-variable">$inp</span>
 </code></pre>
 <pre class="highlight tab tab-cpp"><code><span class="hljs-comment">//C++</span>
-<span class="hljs-keyword">auto</span> idx_not  = lnast-&gt;add_child(idx_not,    Lnast_node::create_assign(token1));
-<span class="hljs-keyword">auto</span> idx_lhs  = lnast-&gt;add_child(idx_assign, Lnast_node::create_ref   (token2)); <span class="hljs-comment">// string_view = %out</span>
-<span class="hljs-keyword">auto</span> idx_op   = lnast-&gt;add_child(idx_assign, Lnast_node::create_ref   (token3)); <span class="hljs-comment">// string_view = $inp       </span>
+<span class="hljs-keyword">auto</span> idx_not  = lnast-&gt;add_child(idx_not,    Lnast_node::create_not(token1));
+<span class="hljs-keyword">auto</span> idx_lhs  = lnast-&gt;add_child(idx_assign, Lnast_node::create_ref(token2)); <span class="hljs-comment">// string_view = %out</span>
+<span class="hljs-keyword">auto</span> idx_op   = lnast-&gt;add_child(idx_assign, Lnast_node::create_ref(token3)); <span class="hljs-comment">// string_view = $inp       </span>
 </code></pre>
 <p><img src="source/graphviz/inv.png" alt="assign"></p>
 <h2 id="logical-not-operation">Logical Not Operation</h2>
@@ -483,9 +483,9 @@ just toggles each bit.</p>
 2 1 1 0    10  ! %out  <span class="hljs-variable">$inp</span>
 </code></pre>
 <pre class="highlight tab tab-cpp"><code><span class="hljs-comment">//C++</span>
-<span class="hljs-keyword">auto</span> idx_not  = lnast-&gt;add_child(idx_logical_not, Lnast_node::create_assign(token1));
-<span class="hljs-keyword">auto</span> idx_lhs  = lnast-&gt;add_child(idx_assign     , Lnast_node::create_ref   (token2)); <span class="hljs-comment">// string_view = %out</span>
-<span class="hljs-keyword">auto</span> idx_op   = lnast-&gt;add_child(idx_assign     , Lnast_node::create_ref   (token3)); <span class="hljs-comment">// string_view = $inp       </span>
+<span class="hljs-keyword">auto</span> idx_not  = lnast-&gt;add_child(idx_logical_not, Lnast_node::create_logical_not(token1));
+<span class="hljs-keyword">auto</span> idx_lhs  = lnast-&gt;add_child(idx_assign     , Lnast_node::create_ref        (token2)); <span class="hljs-comment">// string_view = %out</span>
+<span class="hljs-keyword">auto</span> idx_op   = lnast-&gt;add_child(idx_assign     , Lnast_node::create_ref        (token3)); <span class="hljs-comment">// string_view = $inp       </span>
 </code></pre>
 <p><img src="source/graphviz/logical_inv.png" alt="assign"></p>
 <h1 id="n-ary-operation-statement">N-ary Operation Statement</h1>
