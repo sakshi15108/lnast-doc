@@ -1,3 +1,4 @@
+// @ts-check
 'use strict';
 
 const fs = require('fs');
@@ -5,6 +6,7 @@ const path = require('path');
 
 const maybe = require('call-me-maybe');
 
+// @ts-ignore
 var hljs = require('highlightjs/highlight.pack.js');
 var hlpath = require.resolve('highlightjs/highlight.pack.js').replace('highlight.pack.js', '');
 
@@ -32,6 +34,7 @@ const uglify = require('uglify-js');
 const cheerio = require('cheerio');
 const sanitizeHtml = require('sanitize-html');
 
+let seenIds = {};
 let globalOptions = {};
 
 function safeReadFileSync(filename,encoding) {
@@ -103,7 +106,7 @@ function stylesheet_link_tag(stylesheet, media) {
         if (!fs.existsSync(stylePath)) {
             stylePath = path.join(hlpath, '/styles/' + stylesheet + '.css');
         }
-        var styleContent = safeReadFileSync(stylePath, "utf8");
+        var styleContent = safeReadFileSync(stylePath, 'utf8');
         styleContent = replaceAll(styleContent, '../../source/fonts/', globalOptions.fonturl||'https://raw.githubusercontent.com/Mermade/shins/master/source/fonts/');
         styleContent = replaceAll(styleContent, '../../source/', 'source/');
         if (globalOptions.customCss) {
@@ -124,7 +127,7 @@ function stylesheet_link_tag(stylesheet, media) {
             var target = path.join(globalOptions.root, '/pub/css/' + stylesheet + '.css');
             if (!fs.existsSync(target)) {
                 var source = path.join(hlpath, '/styles/' + stylesheet + '.css');
-                fs.writeFileSync(target, safeReadFileSync(source));
+                fs.writeFileSync(target, safeReadFileSync(source,'utf8'));
             }
         }
         var include = '<link rel="stylesheet" media="' + media + '" href="pub/css/' + stylesheet + '.css">';
@@ -177,20 +180,24 @@ function preProcess(content,options) {
     return lines.join('\n');
 }
 
-function cleanId(id) {
-    return id.toLowerCase().replace(/\W/g, '-');
+function cleanId(id, unique) {
+    id = id.toLowerCase().replace(/\W/g, '-');
+    if (unique && seenIds[id]) id += '-' + ++seenIds[id]
+    else seenIds[id] = 1;
+    return id;
 }
 
 function postProcess(content) {
-    // adds id a la GitHub autolinks to automatically-generated headers
-    content = content.replace(/\<(h[123456])\>(.*)\<\/h[123456]\>/g, function (match, header, title) {
-        return '<' + header + ' id="' + cleanId(title) + '">' + title + '</' + header + '>';
+    // clean up headers which already have ids
+    content = content.replace(/\<(h[123456]) id="(.*)"\>(.*)\<\/h[123456]\>/g, function (match, header, id, title) {
+        return '<' + header + ' id="' + cleanId(id,false) + '">' + title + '</' + header + '>';
     });
 
-    // clean up the other ids as well
-    content = content.replace(/\<(h[123456]) id="(.*)"\>(.*)\<\/h[123456]\>/g, function (match, header, id, title) {
-        return '<' + header + ' id="' + cleanId(id) + '">' + title + '</' + header + '>';
+    // adds id a la GitHub autolinks to automatically-generated headers
+    content = content.replace(/\<(h[123456])\>(.*)\<\/h[123456]\>/g, function (match, header, title) {
+        return '<' + header + ' id="' + cleanId(title,true) + '">' + title + '</' + header + '>';
     });
+
     content = content + globalOptions.comments.join('\n');
     return content;
 }
@@ -231,7 +238,7 @@ function clean(s) {
 }
 
 function getBase64ImageSource(imageSource, imgContent) {
-    if(!imageSource || !imgContent) return "";
+    if (!imageSource || !imgContent) return "";
 
     var mimeType = getMimeType(imageSource);
     return "data:" + mimeType + ";base64," + Buffer.from(imgContent).toString('base64');
@@ -255,22 +262,22 @@ function getMimeType(imageSource) {
 }
 
 function render(inputStr, options, callback) {
-
-    if (options.attr) md.use(attrs);
-    if (options['no-links']) md.disable('linkify');
-
     if (typeof callback === 'undefined') { // for pre-v1.4.0 compatibility
         callback = options;
         options = {};
     }
+    if (options.attr) md.use(attrs);
+    if (options['no-links']) md.disable('linkify');
     if (options.inline == true) {
         options.minify = true;
     }
     if (typeof options.root === 'undefined') {
         options.root = __dirname;
     }
+    seenIds = {}; // reinitialise
     return maybe(callback, new Promise(function (resolve, reject) {
         globalOptions = options;
+        // @ts-ignore
         globalOptions.shins = require('./package.json');
 
         inputStr = inputStr.split('\r\n').join('\n');
@@ -280,6 +287,7 @@ function render(inputStr, options, callback) {
         }
         var headerStr = inputArr[1];
         var header = yaml.parse(headerStr);
+        if (!header) header = {};
 
         /* non-matching languages between Ruby Rouge and highlight.js at 2016/07/10 are
         ['ceylon','common_lisp','conf','cowscript','erb','factor','io','json-doc','liquid','literate_coffeescript','literate_haskell','llvm','make',

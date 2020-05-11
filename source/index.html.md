@@ -7,12 +7,10 @@ language_tabs:
   - cpp: cpp
 
 toc_footers:
-  - >-
-    <a href="https://github.com/masc-ucsc/livehd">LiveHD on Github</a>
+  - <a href="https://github.com/masc-ucsc/livehd">LiveHD on Github</a>
 includes:
   - ntype
   - examples
-
 search: true
 highlight_theme: darkula
 headingLevel: 2
