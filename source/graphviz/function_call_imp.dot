@@ -6,16 +6,17 @@ digraph assign {
   edge  [fontname = "helvetica", color="#142b30", arrowhead="normal", penwidth = 2];
   graph [fontname = "helvetica"];
 
-  
-
-  node0 [label = "<a> stmts | <s1> statement | <s2> statement | <s3> statement |  <s4> statement | <s5> statement | <s6> statement" ];
-  node1 [label = "<a> func_def | <n> func_name | <cond> condition | <stmts> stmts |<io1> input | <io2> input |  <io3> output "]
+  node0 [label = "<a> stmts | <s1> stmt1 | <s2> stmt2 | <s3> stmt3 | <s4> stmt4 | <s5> stmt5 | <s6> stmt6" ];
+  node1 [label = "<a> func_def | <n> func_name | <cstmts> cstmts | <cond> condition | <stmts> stmts |<io1> input | <io2> input |  <io3> output "]
   node2 [label = "<a> ref   | <l> func_xor"];
-  node3 [label = "<a> condition | <l> true"];
-  node4 [label = "<a> stmts | <s1> statement | <s2> statement"];
+  node3 [label = "<a> const | <l> true"];
+  node4 [label = "<a> stmts | <s1> stmt1 | <s2> stmt2"];
   node5 [label = "<a> ref   | <l> $a"];
   node6 [label = "<a> ref   | <l> $b"];
   node7 [label = "<a> ref   | <l> %out"];
+
+  node2b [label = "<a> stmts"];
+  node1:cstmts -> node2b:a;
 
   node8 [label = "<a> xor | <l> lhs | <r1> op1 | <r2> op2 "];
   node9 [label = "<a> ref   | <l> ___b"];
@@ -30,7 +31,6 @@ digraph assign {
   nodeg [label = "<a> ref   | <l> func_xor"];
   nodeh [label = "<a> ref   | <l> \___a"];
 
-  
   nodei [label = "<a> tuple   | <n> tuple_name | <kv1> key-value | <kv2> key-value"]
   nodej [label = "<a> ref   | <l> ___d"];
 
@@ -85,7 +85,7 @@ digraph assign {
 
   nodef:l  -> nodeg:a;
   nodef:r  -> nodeh:a;
-  
+
   nodei:n   -> nodej:a;
   nodei:kv1 -> nodek:a;
   nodei:kv2 -> noden:a;

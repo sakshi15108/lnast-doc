@@ -6,17 +6,28 @@ digraph assign {
   edge  [fontname = "helvetica", color="#142b30", arrowhead="normal", penwidth = 2];
   graph [fontname = "helvetica"];
 
-  
+  node0 [label = "<a> stmts | <s1> stmt1"];
+  node1 [label = "<a> func_def | <n> func_name | <c1> cstmts | <cond> condition | <stmts> stmts |<io1> input | <io2> input |  <io3> input | <io4> output "]
 
-  node0 [label = "<a> stmts | <s1> statement"];
-  node1 [label = "<a> func_def | <n> func_name | <cond> condition | <stmts>
-  stmts |<io1> input | <io2> input |  <io3> input | <io4> output "]
+  node1:c1 -> node2b:a;
+
+  node2b [label = "<a> stmts | <s1> stmt1"];
+  node3b [label = "<a> greaterthan | <l> lhs | <r1> op1 | <r2> op2 "];
+  node4b [label = "<a> ref   | <l> ___a"];
+  node5b [label = "<a> ref   | <l> a"];
+  node6b [label = "<a> const | <l> 0d3"];
+
+  node2b:s1 -> node3b:a;
+  node3b:l  -> node4b:a;
+  node3b:r1 -> node5b:a;
+  node3b:r2 -> node6b:a;
+
   node2 [label = "<a> ref   | <l> func_xor"];
   node3 [label = "<a> ref   | <l> $a"];
   node4 [label = "<a> ref   | <l> $b"];
-  nodex [label = "<a> ref   | <l> $valid"];
+  nodex [label = "<a> ref   | <l> ___a"];
   node5 [label = "<a> ref   | <l> %out"];
-  node6 [label = "<a> stmts | <s1> statement | <s2> statement"];
+  node6 [label = "<a> stmts | <s1> stmt1 | <s2> stmt2"];
 
   node7 [label = "<a> xor | <l> lhs | <r1> op1 | <r2> op2 "];
   node8 [label = "<a> ref   | <l> ___b"];
@@ -27,7 +38,7 @@ digraph assign {
   nodec [label = "<a> ref   | <l> %out"];
   noded [label = "<a> ref   | <l> ___b"];
 
-  nodee [label = "<a> condition | <l> $valid"];
+  nodee [label = "<a> ref | <l> $valid"];
 
   node0:s1  -> node1:a;
   node1:n   -> node2:a;
@@ -44,7 +55,7 @@ digraph assign {
   node7:l -> node8:a;
   node7:r1 -> node9:a;
   node7:r2 -> nodea:a;
-  
+
   nodeb:l -> nodec:a;
   nodeb:r -> noded:a;
 }

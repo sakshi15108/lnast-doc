@@ -5,44 +5,41 @@ digraph assign {
   node  [fontname = "helvetica", shape=record, style="rounded", penwidth = 2];
   edge  [fontname = "helvetica", color="#142b30", arrowhead="normal", penwidth = 2];
   graph [fontname = "helvetica"];
-  
 
-  node0 [label = "<a> stmts | <s1> statement"];
+  node0 [label = "<a> stmts | <s1> stmt1"];
   node1 [label = "<a> if | <c1> cstmts1 | <cd1> condition1 | <s1> stmts1 | <c2> cstmts2 | <cd2> condition2 | <s2>  stmts2 | <s3> stmts3"]
-  node2 [label = "<a> cstmts | <s1> statement"];
+  node2 [label = "<a> stmts | <s1> stmt1"];
 
   node3 [label = "<a> greaterthan | <l> lhs  | <r1> op1 | <r2> op2 "];
   node4 [label = "<a> ref      | <l> ___a"];
   node5 [label = "<a> ref      | <l> a"];
   node6 [label = "<a> const    | <l> 0d10"];
 
-  nodex [label = "<a> condition | <l> ___a"];
+  nodex [label = "<a> ref | <l> ___a"];
 
-  node7 [label = "<a> stmts | <s1> statement"];
+  node7 [label = "<a> stmts | <s1> stmt1"];
   node8 [label = "<a> assign| <l> lhs  | <r> op1 "];
   nodea [label = "<a> ref   | <l> b"];
   nodeb [label = "<a> const | <l> 0d3"];
 
-  nodet [label = "<a> cstmts | <s1> statement"];
+  nodet [label = "<a> stmts | <s1> stmt1"];
   nodec [label = "<a> lessthan | <l> lhs  | <r1> op1 | <r2> op2 "];
   noded [label = "<a> ref   | <l> ___b"];
   nodee [label = "<a> ref   | <l> a"];
   nodef [label = "<a> const | <l> 0d1"];
 
-  nodey [label = "<a> condition | <l> ___b"];
+  nodey [label = "<a> ref | <l> ___b"];
 
-  nodeg [label = "<a> stmts | <s1> statement"];
+  nodeg [label = "<a> stmts | <s1> stmt1"];
   nodeh [label = "<a> assign| <l> lhs  | <r> op1 "];
   nodei [label = "<a> ref   | <l> b"];
   nodej [label = "<a> const | <l> 0d2"];
 
 
-  nodek [label = "<a> stmts | <s1> statement"];
+  nodek [label = "<a> stmts | <s1> stmt1"];
   nodel [label = "<a> assign| <l> lhs  | <r> op1 "];
   nodem [label = "<a> ref   | <l> b"];
   noden [label = "<a> const | <l> 0d3"];
-
-
 
   node0:s1 -> node1:a;
   node1:c1 -> node2:a;
@@ -52,7 +49,7 @@ digraph assign {
   node1:s3 -> nodek:a;
   node1:cd1 -> nodex:a;
   node1:cd2 -> nodey:a;
-  
+
   node2:s1 -> node3:a;
   node3:l  -> node4:a;
   node3:r1 -> node5:a;

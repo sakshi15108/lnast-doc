@@ -22,7 +22,7 @@ digraph assign {
   node6 [label = "<a> ref   | <l> total"];
   node7 [label = "<a> ref   | <l> ___b"];
 
-  node8 [label = "<a> stmts | <s1> statement1 | <s2> statement2 | <s3> statement3"];
+  node8 [label = "<a> stmts | <s1> stmt1 | <s2> stmt2 | <s3> stmt3"];
 
   node8:s1 -> nodea0:a;
   node8:s2 -> nodeb0:a;

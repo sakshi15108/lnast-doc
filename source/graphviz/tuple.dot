@@ -6,9 +6,7 @@ digraph assign {
   edge  [fontname = "helvetica", color="#142b30", arrowhead="normal", penwidth = 2];
   graph [fontname = "helvetica"];
 
-  
-
-  node_0 [label = "<a> stmts | <s1> statement | <s2> statement | <s3> statement"];
+  node_0 [label = "<a> stmts | <s1> stmt1 | <s2> stmt2 | <s3> stmt3"];
 
   node_5 [label = "<a> plus | <l> lhs | <r1> op1 | <r2> op2 "];
   node_6 [label = "<a> ref   | <l> ___d"];

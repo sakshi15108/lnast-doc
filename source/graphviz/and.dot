@@ -17,7 +17,7 @@ digraph assign {
   node_7 [label = "<a> ref   | <l> out"];
   node_8 [label = "<a> ref   | <l> ___a"];
 
-  node_9 [label = "<a> stmts | <s1> statement1 | <s2> statement2"];
+  node_9 [label = "<a> stmts | <s1> stmt1 | <s2> stmt2"];
 
   node_9:s1 -> node_1:a;
   node_9:s2 -> node_6:a;

@@ -6,9 +6,9 @@ digraph assign {
   edge  [fontname = "helvetica", color="#142b30", arrowhead="normal", penwidth = 2];
   graph [fontname = "helvetica"];
 
-  
 
-  node_0 [label = "<a> stmts | <s1> statement | <s2> statement | <s3> statement | <s4> statement | <s5> statement | <s6> statement"];
+
+  node_0 [label = "<a> stmts | <s1> stmt1 | <s2> stmt2 | <s3> stmt3 | <s4> stmt4 | <s5> stmt5 | <s6> stmt6"];
 
   node_2 [label = "<a> dot | <l> lhs | <r1> op1 | <r2> op2 "];
   node_3 [label = "<a> ref   | <l> ___a"];
@@ -55,13 +55,13 @@ digraph assign {
 
   node_9:l   -> node_a:a;
   node_9:r   -> node_b:a;
-  
+
   node_c:n   -> node_d:a;
   node_c:kv1 -> node_e:a;
 
   node_e:l   -> node_f:a;
   node_e:r   -> node_g:a;
-  
+
   node_h:l   -> node_i:a;
   node_h:r   -> node_j:a;
 
