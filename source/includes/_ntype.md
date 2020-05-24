@@ -94,6 +94,20 @@ auto node_reg = Lnast_node::create_ref("#reg_foo", line_num, pos1, pos2);
 
 
 # Assign Statement
+
+LNAST has 3 types of assignments. "=", "as", and ":=". 
+
+* The "lhs = rhs" assignment (assign), copies the rhs value to the lhs and makes sure
+  that there is no bit drop. The lhs has to have equal or more bits than the
+rhs.
+* The "lhs as rhs" assignment (as) is the same as the "=" assignment but it fixes
+  the value. The lhs variable becomes a "C++ const" after the assignment. The
+value assigned can not change again.
+* the "lhs := rhs" assignment (dp_assign) is like the "=" assignment but there is no check
+  for overflow. If the rhs has more bits than the lhs, the upper bits will be
+dropped.
+
+
 ## Assign Trivial Constant
 ```coffescript
 // Pyrope
@@ -102,7 +116,7 @@ val = 1023u10bits
 
 ```verilog
 // Verilog
-assign val = 10`d1023
+assign val = 10`d1023 // val has 10 bits
 ```
 
 ```shell
@@ -131,7 +145,7 @@ of the expression. The left hand side is always a reference. The right hand side
 ## Assign Simple Expression
 ```coffescript
 // Pyrope
-total = (x - 1) + 3 + 2
+total := (x - 1) + 3 + 2
 ```
 
 ```verilog
@@ -155,21 +169,21 @@ assign total = (x - 1) + 3 + 2
 // Note: as mentioned in the introduction, if you have the HDL-AST in hand, using
 // Token directly instead of explicit string, line_num, pos ... etc.
 
-auto node_stmts  = Lnast_node::create_stmts  ("foo",  line_num, pos1, pos2); 
-node node_minus  = Lnast_node::create_minus  ("foo",  line_num, pos1, pos2);
-node node_lhs1   = Lnast_node::create_ref    ("___a", line_num, pos1, pos2);
-node node_op1    = Lnast_node::create_ref    ("x",    line_num, pos1, pos2);
-node node_op2    = Lnast_node::create_const  ("0d1",  line_num, pos1, pos2);
+auto node_stmts  = Lnast_node::create_stmts     ("foo",  line_num, pos1, pos2); 
+node node_minus  = Lnast_node::create_minus     ("foo",  line_num, pos1, pos2);
+node node_lhs1   = Lnast_node::create_ref       ("___a", line_num, pos1, pos2);
+node node_op1    = Lnast_node::create_ref       ("x",    line_num, pos1, pos2);
+node node_op2    = Lnast_node::create_const     ("0d1",  line_num, pos1, pos2);
 
-node node_plus   = Lnast_node::create_plis   ("bar",  line_num, pos1, pos2);
-node node_lhs2   = Lnast_node::create_ref    ("___b", line_num, pos1, pos2);
-node node_op3    = Lnast_node::create_ref    ("___a", line_num, pos1, pos2);
-node node_op4    = Lnast_node::create_const  ("0d3",  line_num, pos1, pos2);
-node node_op5    = Lnast_node::create_const  ("0d2",  line_num, pos1, pos2);
+node node_plus   = Lnast_node::create_plus      ("bar",  line_num, pos1, pos2);
+node node_lhs2   = Lnast_node::create_ref       ("___b", line_num, pos1, pos2);
+node node_op3    = Lnast_node::create_ref       ("___a", line_num, pos1, pos2);
+node node_op4    = Lnast_node::create_const     ("0d3",  line_num, pos1, pos2);
+node node_op5    = Lnast_node::create_const     ("0d2",  line_num, pos1, pos2);
 
-auto node_assign = Lnast_node::create_assign ("foo2",  line_num, pos1, pos2); 
-auto node_lhs3   = Lnast_node::create_ref    ("total", line_num, pos1, pos2);
-auto node_op6    = Lnast_node::create_ref    ("___b",  line_num, pos1, pos2);
+auto node_dpa    = Lnast_node::create_dp_assign ("foo2",  line_num, pos1, pos2); 
+auto node_lhs3   = Lnast_node::create_ref       ("total", line_num, pos1, pos2);
+auto node_op6    = Lnast_node::create_ref       ("___b",  line_num, pos1, pos2);
 
 // construct the LNAST tree 
 auto idx_stmts   = lnast->add_child(idx_root,  node_stmts);
@@ -184,7 +198,7 @@ auto idx_op3     = lnast->add_child(idx_plus,  node_op3);
 auto idx_op4     = lnast->add_child(idx_plus,  node_op4);        
 auto idx_op5     = lnast->add_child(idx_plus,  node_op5);        
 
-auto idx_assign  = lnast->add_child(idx_stmts,  node_assign);
+auto idx_assign  = lnast->add_child(idx_stmts,  node_dpa);
 auto idx_lhs3    = lnast->add_child(idx_assign, node_lhs3);
 auto idx_op6     = lnast->add_child(idx_assign, node_op6);        
 ```

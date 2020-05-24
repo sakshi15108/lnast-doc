@@ -18,7 +18,7 @@ digraph assign {
   nodeb3 [label = "<a> const | <l> 0d3"];
   nodeb4 [label = "<a> const | <l> 0d2"];
 
-  node5 [label = "<a> assign | <l> lhs  | <r> rhs"];
+  node5 [label = "<a> dp_assign | <l> lhs  | <r> rhs"];
   node6 [label = "<a> ref   | <l> total"];
   node7 [label = "<a> ref   | <l> ___b"];
 
