@@ -343,7 +343,7 @@ if a > 3 {
 ```
 
 ```verilog
-assign b2 = (a > 3) ? a - 1 : b; 
+assign b2 = (a > 3) ? a + 1 : b; 
 ```
 
 
